@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Finder</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 30px 60px;
+      background-color: #000;
+      border-bottom: 1px solid #00aaff33;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-shrink: 0;
+    }
+
+    .logo-wrapper {
+      width: 220px;
+      height: 220px;
+      background-color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 50px #00aaff88;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .logo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .site-info {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .site-title {
+      font-size: 2.2rem;
+      color: #00d4ff;
+      font-weight: 800;
+      text-shadow: 0 0 15px #00d4ff44;
+      margin-bottom: 10px;
+    }
+
+    .search-bar {
+      max-width: 380px;
+      width: 150%;
+    }
+
+    .search-bar input {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid #00aaff;
+      background-color: #111;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .header-right {
+      margin-left: auto;
+    }
+
+    .header-right ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      padding: 0;
+      margin: 0;
+      flex-wrap: wrap;
+    }
+
+    .header-right a {
+      color: #00c6ff;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .header-right a:hover {
+      color: #fff;
+      background-color: #00c6ff22;
+    }
+
+    .content {
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    .content p {
+      font-size: 1.4rem;
+      color: #ccc;
+    }
+
+    section {
+      padding: 60px 20px;
+    }
+
+    section h2 {
+      font-size: 2.2rem;
+      color: #00c6ff;
+      margin-bottom: 30px;
+      text-align: center;
+      text-shadow: 0 0 10px #00c6ff55;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .category-card {
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 170, 255, 0.2);
+      transition: all 0.3s ease-in-out;
+    }
+
+    .category-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 170, 255, 0.4);
+    }
+
+    .category-card img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+
+    .category-card p {
+      margin: 0;
+      padding: 16px;
+      text-align: center;
+      font-size: 1.1rem;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+
+    #searchResults {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #searchResults div {
+      background: #111;
+      padding: 10px 20px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #00aaff44;
+    }
+
+    #searchResults a {
+      color: #00c6ff;
+      text-decoration: none;
+    }
+
+    @media (max-width: 768px) {
+      header {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+      }
+
+      .header-left {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .logo-wrapper {
+        width: 170px;
+        height: 170px;
+        margin-bottom: 10px;
+      }
+
+      .site-title {
+        font-size: 1.8rem;
+        text-align: center;
+      }
+
+      .header-right {
+        margin-left: 0;
+        margin-top: 20px;
+      }
+
+      .header-right ul {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <div class="logo-wrapper">
+        <img src="images/0000.jpg" alt="Site Logo" class="logo" />
+      </div>
+      <div class="site-info">
+        <div class="site-title">Free Finder</div>
+        <div class="search-bar">
+          <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchResources()" />
+        </div>
+      </div>
+    </div>
+
+    <nav class="header-right">
+      <ul>
+        <li><a href="products.html">PRODUCT</a></li>
+        <li><a href="adventureblog.html">INDUSTRY</a></li>
+        <li><a href="Home.html">HOME</a></li>
+        <li><a href="aboutus.html">ABOUT US</a></li>
+        <li><a href="contact.html">CONTACT US</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div id="searchResults"></div>
+  <!-- ▶️ Entertainment --> 
+  <section>
+    <h2>🎬 Entertainment</h2>
+    <div class="category-grid">
+      <a href="https://swatchseries.is/" target="_blank" class="category-card">
+        <img src="images/0001.jpg" alt="Free Movies" />
+        <p>Free Movies</p>
+      </a>
+      <a href="https://aniwatchtv.to//" target="_blank" class="category-card">
+        <img src="images/0010.jpg" alt="Free Anime" />
+        <p>Free Anime</p>
+      </a>
+      <a href="https://tv.garden/at/" target="_blank" class="category-card">
+        <img src="images/0009.jpg" alt="Free TV Channels" />
+        <p>Free TV Channels</p>
+      </a>
+      <a href="https://topdocumentaryfilms.com/" target="_blank" class="category-card">
+        <img src="images/0007.jpg" alt="Free Documentaries" />
+        <p>Free Documentaries</p>
+      </a>
+      <a href="https://freemusicarchive.org" target="_blank" class="category-card">
+        <img src="images/0003.jpg" alt="Free Music" />
+        <p>Free Music</p>
+      </a>
+      <a href="https://www.myabandonware.com" target="_blank" class="category-card">
+        <img src="images/0002.jpg" alt="Free Games" />
+        <p>Free Games</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- 🧠 Learning & Books -->
+  <section>
+    <h2>📚 Learning & Reading</h2>
+    <div class="category-grid">
+      <a href="https://www.gutenberg.org/" target="_blank" class="category-card">
+        <img src="images/0004.jpg" alt="Free Books" />
+        <p>Free Books</p>
+      </a>
+      <a href="https://librivox.org/" target="_blank" class="category-card">
+        <img src="images/0005.jpg" alt="Free Audiobooks" />
+        <p>Free Audiobooks</p>
+      </a>
+      <a href="https://www.edx.org/" target="_blank" class="category-card">
+        <img src="images/0006.jpg" alt="Free Courses" />
+        <p>Free Courses</p>
+      </a>
+      <a href="https://archive.org/" target="_blank" class="category-card">
+        <img src="images/0011.jpg" alt="Free Libraries" />
+        <p>Free E-Libraries</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- 🛠️ Software & Tools -->
+  <section>
+    <h2>🛠️ Software & Tools</h2>
+    <div class="category-grid">
+      <a href="https://ninite.com/" target="_blank" class="category-card">
+        <img src="images/0008.jpg" alt="Free Software" />
+        <p>Free Software</p>
+      </a>
+      <a href="https://alternativeto.net/" target="_blank" class="category-card">
+        <img src="images/0012.jpg" alt="Free Tools" />
+        <p>Free Tools</p>
+      </a>
+      <a href="https://portableapps.com/" target="_blank" class="category-card">
+        <img src="images/0016.jpg" alt="Portable Apps" />
+        <p>Portable Apps</p>
+      </a>
+      <a href="https://osalt.com/" target="_blank" class="category-card">
+        <img src="images/0017.jpg" alt="Open Source Alternatives" />
+        <p>Open Source Alternatives</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- 🎨 Creative Assets -->
+  <section>
+    <h2>🎨 Creative Assets</h2>
+    <div class="category-grid">
+      <a href="https://www.dafont.com/" target="_blank" class="category-card">
+        <img src="images/0013.jpg" alt="Free Fonts" />
+        <p>Free Fonts</p>
+      </a>
+      <a href="https://www.pexels.com/" target="_blank" class="category-card">
+        <img src="images/0014.jpg" alt="Free Stock Photos" />
+        <p>Free Stock Photos</p>
+      </a>
+      <a href="https://html5up.net/" target="_blank" class="category-card">
+        <img src="images/0015.jpg" alt="Free Website Templates" />
+        <p>Free Web Templates</p>
+      </a>
+      <a href="https://www.flaticon.com/" target="_blank" class="category-card">
+        <img src="images/0018.jpg" alt="Free Icons" />
+        <p>Free Icons</p>
+      </a>
+      <a href="https://www.canva.com/design-templates/" target="_blank" class="category-card">
+        <img src="images/0019.jpg" alt="Free Design Templates" />
+        <p>Design Templates</p>
+      </a>
+      <a href="https://www.mixkit.co/" target="_blank" class="category-card">
+        <img src="images/0020.jpg" alt="Free Video Assets" />
+        <p>Free Video Assets</p>
+      </a>
+      <a href="https://www.remove.bg/" target="_blank" class="category-card">
+        <img src="images/0021.jpg" alt="Background Remover Tool" />
+        <p>Free Background Remover</p>
+      </a>
+    </div>
+  </section>
+
+  <script>
+    function searchResources() {
+      const input = document.getElementById("searchInput").value.toLowerCase();
+      const cards = document.querySelectorAll(".category-card");
+      const resultsContainer = document.getElementById("searchResults");
+      resultsContainer.innerHTML = "";
+
+      if (input === "") return;
+
+      let found = false;
+
+      cards.forEach(card => {
+        // Get the label text from the <p> inside the card
+        const label = card.querySelector("p").textContent.toLowerCase();
+
+        if (label.includes(input)) {
+          found = true;
+          const link = card.href;
+          resultsContainer.innerHTML += `
+            <div>
+              <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
+            </div>
+          `;
+        }
+      });
+
+      if (!found) {
+        resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
+      }
+    }
+  </script>
+
+</body>
+</html>
