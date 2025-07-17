@@ -3,20 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "XMPN1BECultZ3Fyrv",
-      });
-   })();
-</script>
-<script src="script.js"></script>
-
   <title>Free Finder</title>
-
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init({ publicKey: "XMPN1BECultZ3Fyrv" });
+    })();
+  </script>
   <style>
-    
     * {
       box-sizing: border-box;
     }
@@ -140,16 +134,6 @@
       background-color: #00c6ff22;
     }
 
-    .content {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .content p {
-      font-size: 1.4rem;
-      color: #ccc;
-    }
-
     section {
       padding: 60px 20px;
     }
@@ -255,6 +239,7 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header>
     <div class="login-bar">
       <button onclick="openAuthModal()">🔐 Login / Register</button>
@@ -285,342 +270,145 @@
     </div>
   </header>
 
+  <!-- Search Results -->
   <div id="searchResults"></div>
-  <!-- 🧠 AI Tools -->
+
+  <!-- Categories -->
   <section>
-    <h2>🧠 AI Tools</h2>
+    <h2>🎬 Entertainment</h2>
     <div class="category-grid">
-      <a href="https://chat.openai.com/" target="_blank" class="category-card">
-        <img src="images/chatgpt.jpg" alt="ChatGPT" />
-        <p>ChatGPT (OpenAI)</p>
-      </a>
-      <a href="https://bard.google.com/" target="_blank" class="category-card">
-        <img src="images/bard.jpg" alt="Google Bard" />
-        <p>Google Bard</p>
-      </a>
-      <a href="https://www.perplexity.ai/" target="_blank" class="category-card">
-        <img src="images/perplexity.jpg" alt="Perplexity AI" />
-        <p>Perplexity AI</p>
-      </a>
-      <a href="https://huggingface.co/" target="_blank" class="category-card">
-        <img src="images/huggingface.jpg" alt="Hugging Face" />
-        <p>Hugging Face Hub</p>
-      </a>
-      <a href="https://www.runwayml.com/" target="_blank" class="category-card">
-        <img src="images/runway.jpg" alt="Runway ML" />
-        <p>Runway ML</p>
-      </a>
-      <a href="https://www.midjourney.com/" target="_blank" class="category-card">
-        <img src="images/midjourney.jpg" alt="MidJourney" />
-        <p>MidJourney (AI Art)</p>
-      </a>
+      <a href="https://swatchseries.is/" class="category-card"><img src="images/0001.jpg" alt="Free Movies"><p>Free Movies</p></a>
+      <a href="https://aniwatchtv.to/" class="category-card"><img src="images/0010.jpg" alt="Free Anime"><p>Free Anime</p></a>
+      <a href="https://tv.garden/at/" class="category-card"><img src="images/0009.jpg" alt="Free TV"><p>Free TV Channels</p></a>
+      <a href="https://topdocumentaryfilms.com/" class="category-card"><img src="images/0007.jpg" alt="Docs"><p>Free Documentaries</p></a>
+      <a href="https://freemusicarchive.org" class="category-card"><img src="images/0003.jpg" alt="Free Music" /><p>Free Music</p></a>
+      <a href="https://www.myabandonware.com" class="category-card"><img src="images/0002.jpg" alt="Free Games" /><p>Free Games</p></a>
+   
     </div>
   </section>
 
-  <!-- 🎓 AI Learning -->
   <section>
-    <h2>🎓 AI Learning</h2>
+    <h2>📚 Learning & Reading</h2>
     <div class="category-grid">
-      <a href="https://www.coursera.org/learn/machine-learning" target="_blank" class="category-card">
-        <img src="images/coursera.jpg" alt="Andrew Ng ML Course" />
-        <p>Machine Learning by Andrew Ng</p>
-      </a>
-      <a href="https://fast.ai/" target="_blank" class="category-card">
-        <img src="images/fastai.jpg" alt="Fast.ai" />
-        <p>Fast.ai Deep Learning</p>
-      </a>
-      <a href="https://www.deeplearning.ai/" target="_blank" class="category-card">
-        <img src="images/deeplearningai.jpg" alt="DeepLearning.ai" />
-        <p>DeepLearning.ai</p>
-      </a>
-      <a href="https://ai.google/education/" target="_blank" class="category-card">
-        <img src="images/googleai.jpg" alt="Google AI Education" />
-        <p>Google AI Education</p>
-      </a>
+      <a href="https://www.gutenberg.org/" class="category-card"><img src="images/0004.jpg"><p>Free Books</p></a>
+      <a href="https://librivox.org/" class="category-card"><img src="images/0005.jpg"><p>Free Audiobooks</p></a>
+      <a href="https://www.edx.org/" class="category-card"><img src="images/0006.jpg"><p>Free Courses</p></a>
+      <a href="https://archive.org/" class="category-card"><img src="images/0011.jpg"><p>Free Libraries</p></a>
     </div>
   </section>
 
-  <!-- 📁 AI Datasets & Models -->
   <section>
-    <h2>📁 Datasets & Pretrained Models</h2>
+    <h2>🛠️ Software & Tools</h2>
     <div class="category-grid">
-      <a href="https://huggingface.co/models" target="_blank" class="category-card">
-        <img src="images/hf-models.jpg" alt="HF Models" />
-        <p>Pretrained Models (Hugging Face)</p>
-      </a>
-      <a href="https://paperswithcode.com/datasets" target="_blank" class="category-card">
-        <img src="images/paperswithcode.jpg" alt="PapersWithCode" />
-        <p>PapersWithCode Datasets</p>
-      </a>
-      <a href="https://www.kaggle.com/datasets" target="_blank" class="category-card">
-        <img src="images/kaggle.jpg" alt="Kaggle Datasets" />
-        <p>Kaggle Datasets</p>
-      </a>
-      <a href="https://datasetsearch.research.google.com/" target="_blank" class="category-card">
-        <img src="images/googleds.jpg" alt="Google Dataset Search" />
-        <p>Google Dataset Search</p>
-      </a>
+      <a href="https://ninite.com/" class="category-card"><img src="images/0008.jpg"><p>Free Software</p></a>
+      <a href="https://alternativeto.net/" class="category-card"><img src="images/0012.jpg"><p>Free Tools</p></a>
+      <a href="https://portableapps.com/" class="category-card"><img src="images/0016.jpg"><p>Portable Apps</p></a>
+      <a href="https://osalt.com/" class="category-card"><img src="images/0017.jpg"><p>Open Source Alternatives</p></a>
     </div>
   </section>
 
-  <!-- 📚 AI Research -->
   <section>
-    <h2>📚 Research & Papers</h2>
+    <h2>🎨 Creative Assets</h2>
     <div class="category-grid">
-      <a href="https://arxiv.org/list/cs.AI/recent" target="_blank" class="category-card">
-        <img src="images/arxiv.jpg" alt="arXiv AI" />
-        <p>Latest AI Papers (arXiv)</p>
-      </a>
-      <a href="https://paperswithcode.com/" target="_blank" class="category-card">
-        <img src="images/pwc.jpg" alt="Papers with Code" />
-        <p>Papers with Code</p>
-      </a>
-      <a href="https://openreview.net/" target="_blank" class="category-card">
-        <img src="images/openreview.jpg" alt="OpenReview" />
-        <p>OpenReview.net</p>
-      </a>
+      <a href="https://www.dafont.com/" class="category-card"><img src="images/0013.jpg"><p>Free Fonts</p></a>
+      <a href="https://www.pexels.com/" class="category-card"><img src="images/0014.jpg"><p>Free Stock Photos</p></a>
+      <a href="https://html5up.net/" class="category-card"><img src="images/0015.jpg"><p>Free Web Templates</p></a>
+      <a href="https://www.flaticon.com/" class="category-card"><img src="images/0018.jpg"><p>Free Icons</p></a>
+      <a href="https://www.canva.com/design-templates/" class="category-card"><img src="images/0019.jpg"><p>Design Templates</p></a>
+      <a href="https://www.mixkit.co/" class="category-card"><img src="images/0020.jpg"><p>Free Video Assets</p></a>
+      <a href="https://www.remove.bg/" class="category-card"><img src="images/0021.jpg"><p>Background Remover</p></a>
     </div>
   </section>
 
-  <!-- 🌐 AI Communities -->
-  <section>
-    <h2>🌐 AI Communities</h2>
-    <div class="category-grid">
-      <a href="https://www.reddit.com/r/MachineLearning/" target="_blank" class="category-card">
-        <img src="images/redditml.jpg" alt="Reddit ML" />
-        <p>r/MachineLearning</p>
-      </a>
-      <a href="https://discord.gg/ai" target="_blank" class="category-card">
-        <img src="images/discord.jpg" alt="AI Discord" />
-        <p>AI Discord Servers</p>
-      </a>
-      <a href="https://github.com/topics/machine-learning" target="_blank" class="category-card">
-        <img src="images/github.jpg" alt="GitHub ML" />
-        <p>GitHub Projects (ML)</p>
-      </a>
+  <!-- 🔐 Login/Register Modal -->
+  <div id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid #00c6ff;width:90%;max-width:460px;color:#fff;">
+      <h2 style="text-align:center;color:#00c6ff;">🔐 Login or Register</h2>
+      <label>Email</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" style="width:100%;padding:10px;margin-bottom:12px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
+      <label>Password</label>
+      <input type="password" id="authPassword" placeholder="Enter password" style="width:100%;padding:10px;margin-bottom:20px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="loginUser()" style="flex:1;background:#00c6ff;color:#000;padding:10px;border:none;border-radius:8px;">🔓 Login</button>
+        <button onclick="registerUser()" style="flex:1;background:#00ffb3;color:#000;padding:10px;border:none;border-radius:8px;">📝 Register</button>
+        <button onclick="closeAuthModal()" style="flex:1;background:#ff0033;color:#fff;padding:10px;border:none;border-radius:8px;">✖ Close</button>
+      </div>
     </div>
-  </section>
+  </div>
 
   <script>
+    function openAuthModal() {
+      document.getElementById("authModal").style.display = "flex";
+    }
+
+    function closeAuthModal() {
+      document.getElementById("authModal").style.display = "none";
+    }
+
+    function loginUser() {
+      const email = document.getElementById("authEmail").value;
+      const password = document.getElementById("authPassword").value;
+      const stored = JSON.parse(localStorage.getItem("users") || "{}");
+
+      if (stored[email] && stored[email] === password) {
+        localStorage.setItem("loggedInUser", email);
+        alert("✅ Login successful!");
+        closeAuthModal();
+      } else {
+        alert("❌ Invalid email or password.");
+      }
+    }
+
+    function registerUser() {
+      const email = document.getElementById("authEmail").value;
+      const password = document.getElementById("authPassword").value;
+      if (!email || !password) return alert("❗ Fill both fields.");
+      let users = JSON.parse(localStorage.getItem("users") || "{}");
+
+      if (users[email]) {
+        alert("⚠️ Email already registered.");
+      } else {
+        users[email] = password;
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("✅ Registered. You can log in now.");
+      }
+    }
+
+    window.onload = function () {
+      const user = localStorage.getItem("loggedInUser");
+      if (!user) openAuthModal();
+    };
+
+    document.querySelectorAll(".category-card").forEach(card => {
+      card.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (confirm("🔔 Leaving site. Continue?")) {
+          window.open(this.href, "_blank");
+        }
+      });
+    });
+
     function searchResources() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const cards = document.querySelectorAll(".category-card");
       const resultsContainer = document.getElementById("searchResults");
       resultsContainer.innerHTML = "";
 
-      if (input === "") return;
-
+      if (!input) return;
       let found = false;
 
       cards.forEach(card => {
         const label = card.querySelector("p").textContent.toLowerCase();
         if (label.includes(input)) {
           found = true;
-          const link = card.href;
-          resultsContainer.innerHTML += `
-            <div>
-              <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
-            </div>
-          `;
+          resultsContainer.innerHTML += `<div><a href="${card.href}" target="_blank">${card.querySelector("p").textContent}</a></div>`;
         }
       });
 
       if (!found) {
-        resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
+        resultsContainer.innerHTML = "<p style='text-align:center;color:#aaa;'>No results found.</p>";
       }
     }
   </script>
-
-
- <!-- 🔒 Stylish Login/Register Modal -->
-  
-<div id="authModal" style="
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Segoe UI', sans-serif;
-">
-
-  <div style="
-    background: #1a1a1a;
-    padding: 40px 30px;
-    border-radius: 16px;
-    border: 2px solid #00c6ff;
-    width: 90%;
-    max-width: 460px;
-    color: #fff;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    animation: fadeIn 0.3s ease-in-out;
-  ">
-    <h2 style="margin: 0 0 20px; color: #00c6ff; text-align: center; font-size: 28px;">
-      🔐 Login or Register
-
-    </h2>
-
-    <label style="font-weight: bold; display: block; margin-bottom: 6px;">Email</label>
-    <input type="email" id="authEmail" placeholder="you@example.com" style="
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      border: 1px solid #00c6ff;
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-    " />
-
-    <label style="font-weight: bold; display: block; margin-bottom: 6px;">Password</label>
-    <input type="password" id="authPassword" placeholder="Enter your password" style="
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 30px;
-      border-radius: 8px;
-      border: 1px solid #00c6ff;
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-    " />
-
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-      <button onclick="loginUser()" style="
-        flex: 1;
-        padding: 12px;
-        background: #00c6ff;
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">🔓 Login</button>
-
-      <button onclick="registerUser()" style="
-        flex: 1;
-        padding: 12px;
-        background: #00ffb3;
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">📝 Register</button>
-
-      <button onclick="closeAuthModal()" style="
-        flex: 1;
-        padding: 12px;
-        background: #ff0033;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">✖ Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- 🔧 Script for Login/Register Logic -->
-<script>
-  function openAuthModal() {
-    document.getElementById("authModal").style.display = "flex";
-  }
-
-  function closeAuthModal() {
-    document.getElementById("authModal").style.display = "none";
-  }
-
-  function loginUser() {
-    const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
-
-    const stored = JSON.parse(localStorage.getItem("users") || "{}");
-    if (stored[email] && stored[email] === password) {
-      localStorage.setItem("loggedInUser", email);
-      alert("✅ Login successful! A confirmation email was sent.");
-      console.log("📩 Confirmation email sent to:", email);
-      closeAuthModal();
-    } else {
-      alert("❌ Invalid email or password.");
-    }
-  }
-
-  function registerUser() {
-    const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
-
-    if (!email || !password) {
-      alert("❗ Please fill in both fields.");
-      return;
-    }
-
-    let users = JSON.parse(localStorage.getItem("users") || "{}");
-    if (users[email]) {
-      alert("⚠️ Email already registered.");
-    } else {
-      users[email] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      alert("✅ Registered successfully. You can now log in.");
-    }
-  }
-
-  window.onload = function () {
-    const user = localStorage.getItem("loggedInUser");
-    if (!user) {
-      document.getElementById("authModal").style.display = "flex";
-    }
-  };
-
-  document.querySelectorAll(".category-card").forEach(card => {
-    card.addEventListener("click", function (e) {
-      e.preventDefault();
-      const confirmed = confirm("🔔 Reminder: You are about to visit an external site. Proceed?");
-      if (confirmed) {
-        window.open(this.href, "_blank");
-      }
-    });
-  });
-
-  function searchResources() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const cards = document.querySelectorAll(".category-card");
-    const resultsContainer = document.getElementById("searchResults");
-    resultsContainer.innerHTML = "";
-
-    if (input === "") return;
-
-    let found = false;
-
-    cards.forEach(card => {
-      const label = card.querySelector("p").textContent.toLowerCase();
-      if (label.includes(input)) {
-        found = true;
-        const link = card.href;
-        resultsContainer.innerHTML += `
-          <div>
-            <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
-          </div>
-        `;
-      }
-    });
-
-    if (!found) {
-      resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
-    }
-  }
-</script>
-
-<!-- 🔥 Optional Animation -->
-<style>
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-</style>
-
-
 </body>
 </html>
