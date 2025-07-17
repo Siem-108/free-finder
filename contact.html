@@ -407,7 +407,7 @@
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
     // Initialize EmailJS with your public key
-    emailjs.init("YOUR_PUBLIC_KEY"); // <-- REPLACE with your EmailJS public key
+    emailjs.init("XMPN1BECultZ3Fyrv"); // <-- REPLACE with your EmailJS public key
 
     const form = document.getElementById("contact-form");
     const statusMessage = document.getElementById("statusMessage");
@@ -432,7 +432,7 @@
 
       // Send email using EmailJS
       emailjs
-        .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params) // <-- Replace these with your EmailJS Service ID and Template ID
+        .send("service_t5qcgjv", "template_f1tvom3", params) // <-- Replace these with your EmailJS Service ID and Template ID
         .then(function (response) {
           statusMessage.textContent = "✅ Message sent successfully!";
           statusMessage.className = "success";
