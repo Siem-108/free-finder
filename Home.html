@@ -4,6 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Free Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init({ publicKey: "XMPN1BECultZ3Fyrv" });
+    })();
+  </script>
   <style>
     * {
       box-sizing: border-box;
@@ -18,11 +24,32 @@
 
     header {
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 30px 60px;
+      flex-direction: column;
       background-color: #000;
       border-bottom: 1px solid #00aaff33;
+    }
+
+    .login-bar {
+      width: 100%;
+      text-align: right;
+      padding: 10px 20px;
+    }
+
+    .login-bar button {
+      background: #00c6ff;
+      color: #000;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
       flex-wrap: wrap;
       gap: 20px;
     }
@@ -84,10 +111,6 @@
       outline: none;
     }
 
-    .header-right {
-      margin-left: auto;
-    }
-
     .header-right ul {
       list-style: none;
       display: flex;
@@ -109,16 +132,6 @@
     .header-right a:hover {
       color: #fff;
       background-color: #00c6ff22;
-    }
-
-    .content {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .content p {
-      font-size: 1.4rem;
-      color: #ccc;
     }
 
     section {
@@ -192,7 +205,7 @@
     }
 
     @media (max-width: 768px) {
-      header {
+      .header-content {
         flex-direction: column;
         align-items: center;
         padding: 20px;
@@ -215,7 +228,6 @@
       }
 
       .header-right {
-        margin-left: 0;
         margin-top: 20px;
       }
 
@@ -227,174 +239,173 @@
 </head>
 <body>
 
+  <!-- Header -->
   <header>
-    <div class="header-left">
-      <div class="logo-wrapper">
-        <img src="images/0000.jpg" alt="Site Logo" class="logo" />
-      </div>
-      <div class="site-info">
-        <div class="site-title">Free Finder</div>
-        <div class="search-bar">
-          <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchResources()" />
-        </div>
-      </div>
+    <div class="login-bar">
+      <button onclick="openAuthModal()">🔐 Login / Register</button>
     </div>
 
-    <nav class="header-right">
-      <ul>
-        <li><a href="products.html">PRODUCT</a></li>
-        <li><a href="adventureblog.html">INDUSTRY</a></li>
-        <li><a href="Home.html">HOME</a></li>
-        <li><a href="aboutus.html">ABOUT US</a></li>
-        <li><a href="contact.html">CONTACT US</a></li>
-      </ul>
-    </nav>
+    <div class="header-content">
+      <div class="header-left">
+        <a href="Home.html" class="logo-wrapper">
+          <img src="images/0000.jpg" alt="Site Logo" class="logo" />
+        </a>
+        <div class="site-info">
+          <div class="site-title">Free Finder</div>
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchResources()" />
+          </div>
+        </div>
+      </div>
+
+      <nav class="header-right">
+        <ul>
+          <li><a href="ai.html">AI</a></li>
+          <li><a href="crypto.html">CRYPTO</a></li>
+          <li><a href="Home.html">HOME</a></li>
+          <li><a href="culture.html">CULTURE</a></li>
+          <li><a href="contact.html">CONTACT US</a></li>
+        </ul>
+      </nav>
+    </div>
   </header>
 
+  <!-- Search Results -->
   <div id="searchResults"></div>
-  <!-- ▶️ Entertainment --> 
+
+  <!-- Categories -->
   <section>
     <h2>🎬 Entertainment</h2>
     <div class="category-grid">
-      <a href="https://swatchseries.is/" target="_blank" class="category-card">
-        <img src="images/0001.jpg" alt="Free Movies" />
-        <p>Free Movies</p>
-      </a>
-      <a href="https://aniwatchtv.to//" target="_blank" class="category-card">
-        <img src="images/0010.jpg" alt="Free Anime" />
-        <p>Free Anime</p>
-      </a>
-      <a href="https://tv.garden/at/" target="_blank" class="category-card">
-        <img src="images/0009.jpg" alt="Free TV Channels" />
-        <p>Free TV Channels</p>
-      </a>
-      <a href="https://topdocumentaryfilms.com/" target="_blank" class="category-card">
-        <img src="images/0007.jpg" alt="Free Documentaries" />
-        <p>Free Documentaries</p>
-      </a>
-      <a href="https://freemusicarchive.org" target="_blank" class="category-card">
-        <img src="images/0003.jpg" alt="Free Music" />
-        <p>Free Music</p>
-      </a>
-      <a href="https://www.myabandonware.com" target="_blank" class="category-card">
-        <img src="images/0002.jpg" alt="Free Games" />
-        <p>Free Games</p>
-      </a>
+      <a href="https://swatchseries.is/" class="category-card"><img src="images/0001.jpg" alt="Free Movies"><p>Free Movies</p></a>
+      <a href="https://aniwatchtv.to/" class="category-card"><img src="images/0010.jpg" alt="Free Anime"><p>Free Anime</p></a>
+      <a href="https://tv.garden/at/" class="category-card"><img src="images/0009.jpg" alt="Free TV"><p>Free TV Channels</p></a>
+      <a href="https://topdocumentaryfilms.com/" class="category-card"><img src="images/0007.jpg" alt="Docs"><p>Free Documentaries</p></a>
     </div>
   </section>
 
-  <!-- 🧠 Learning & Books -->
   <section>
     <h2>📚 Learning & Reading</h2>
     <div class="category-grid">
-      <a href="https://www.gutenberg.org/" target="_blank" class="category-card">
-        <img src="images/0004.jpg" alt="Free Books" />
-        <p>Free Books</p>
-      </a>
-      <a href="https://librivox.org/" target="_blank" class="category-card">
-        <img src="images/0005.jpg" alt="Free Audiobooks" />
-        <p>Free Audiobooks</p>
-      </a>
-      <a href="https://www.edx.org/" target="_blank" class="category-card">
-        <img src="images/0006.jpg" alt="Free Courses" />
-        <p>Free Courses</p>
-      </a>
-      <a href="https://archive.org/" target="_blank" class="category-card">
-        <img src="images/0011.jpg" alt="Free Libraries" />
-        <p>Free E-Libraries</p>
-      </a>
+      <a href="https://www.gutenberg.org/" class="category-card"><img src="images/0004.jpg"><p>Free Books</p></a>
+      <a href="https://librivox.org/" class="category-card"><img src="images/0005.jpg"><p>Free Audiobooks</p></a>
+      <a href="https://www.edx.org/" class="category-card"><img src="images/0006.jpg"><p>Free Courses</p></a>
+      <a href="https://archive.org/" class="category-card"><img src="images/0011.jpg"><p>Free Libraries</p></a>
     </div>
   </section>
 
-  <!-- 🛠️ Software & Tools -->
   <section>
     <h2>🛠️ Software & Tools</h2>
     <div class="category-grid">
-      <a href="https://ninite.com/" target="_blank" class="category-card">
-        <img src="images/0008.jpg" alt="Free Software" />
-        <p>Free Software</p>
-      </a>
-      <a href="https://alternativeto.net/" target="_blank" class="category-card">
-        <img src="images/0012.jpg" alt="Free Tools" />
-        <p>Free Tools</p>
-      </a>
-      <a href="https://portableapps.com/" target="_blank" class="category-card">
-        <img src="images/0016.jpg" alt="Portable Apps" />
-        <p>Portable Apps</p>
-      </a>
-      <a href="https://osalt.com/" target="_blank" class="category-card">
-        <img src="images/0017.jpg" alt="Open Source Alternatives" />
-        <p>Open Source Alternatives</p>
-      </a>
+      <a href="https://ninite.com/" class="category-card"><img src="images/0008.jpg"><p>Free Software</p></a>
+      <a href="https://alternativeto.net/" class="category-card"><img src="images/0012.jpg"><p>Free Tools</p></a>
+      <a href="https://portableapps.com/" class="category-card"><img src="images/0016.jpg"><p>Portable Apps</p></a>
+      <a href="https://osalt.com/" class="category-card"><img src="images/0017.jpg"><p>Open Source Alternatives</p></a>
     </div>
   </section>
 
-  <!-- 🎨 Creative Assets -->
   <section>
     <h2>🎨 Creative Assets</h2>
     <div class="category-grid">
-      <a href="https://www.dafont.com/" target="_blank" class="category-card">
-        <img src="images/0013.jpg" alt="Free Fonts" />
-        <p>Free Fonts</p>
-      </a>
-      <a href="https://www.pexels.com/" target="_blank" class="category-card">
-        <img src="images/0014.jpg" alt="Free Stock Photos" />
-        <p>Free Stock Photos</p>
-      </a>
-      <a href="https://html5up.net/" target="_blank" class="category-card">
-        <img src="images/0015.jpg" alt="Free Website Templates" />
-        <p>Free Web Templates</p>
-      </a>
-      <a href="https://www.flaticon.com/" target="_blank" class="category-card">
-        <img src="images/0018.jpg" alt="Free Icons" />
-        <p>Free Icons</p>
-      </a>
-      <a href="https://www.canva.com/design-templates/" target="_blank" class="category-card">
-        <img src="images/0019.jpg" alt="Free Design Templates" />
-        <p>Design Templates</p>
-      </a>
-      <a href="https://www.mixkit.co/" target="_blank" class="category-card">
-        <img src="images/0020.jpg" alt="Free Video Assets" />
-        <p>Free Video Assets</p>
-      </a>
-      <a href="https://www.remove.bg/" target="_blank" class="category-card">
-        <img src="images/0021.jpg" alt="Background Remover Tool" />
-        <p>Free Background Remover</p>
-      </a>
+      <a href="https://www.dafont.com/" class="category-card"><img src="images/0013.jpg"><p>Free Fonts</p></a>
+      <a href="https://www.pexels.com/" class="category-card"><img src="images/0014.jpg"><p>Free Stock Photos</p></a>
+      <a href="https://html5up.net/" class="category-card"><img src="images/0015.jpg"><p>Free Web Templates</p></a>
+      <a href="https://www.flaticon.com/" class="category-card"><img src="images/0018.jpg"><p>Free Icons</p></a>
+      <a href="https://www.canva.com/design-templates/" class="category-card"><img src="images/0019.jpg"><p>Design Templates</p></a>
+      <a href="https://www.mixkit.co/" class="category-card"><img src="images/0020.jpg"><p>Free Video Assets</p></a>
+      <a href="https://www.remove.bg/" class="category-card"><img src="images/0021.jpg"><p>Background Remover</p></a>
     </div>
   </section>
 
+  <!-- 🔐 Login/Register Modal -->
+  <div id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;justify-content:center;align-items:center;">
+    <div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid #00c6ff;width:90%;max-width:460px;color:#fff;">
+      <h2 style="text-align:center;color:#00c6ff;">🔐 Login or Register</h2>
+      <label>Email</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" style="width:100%;padding:10px;margin-bottom:12px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
+      <label>Password</label>
+      <input type="password" id="authPassword" placeholder="Enter password" style="width:100%;padding:10px;margin-bottom:20px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button onclick="loginUser()" style="flex:1;background:#00c6ff;color:#000;padding:10px;border:none;border-radius:8px;">🔓 Login</button>
+        <button onclick="registerUser()" style="flex:1;background:#00ffb3;color:#000;padding:10px;border:none;border-radius:8px;">📝 Register</button>
+        <button onclick="closeAuthModal()" style="flex:1;background:#ff0033;color:#fff;padding:10px;border:none;border-radius:8px;">✖ Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
+    function openAuthModal() {
+      document.getElementById("authModal").style.display = "flex";
+    }
+
+    function closeAuthModal() {
+      document.getElementById("authModal").style.display = "none";
+    }
+
+    function loginUser() {
+      const email = document.getElementById("authEmail").value;
+      const password = document.getElementById("authPassword").value;
+      const stored = JSON.parse(localStorage.getItem("users") || "{}");
+
+      if (stored[email] && stored[email] === password) {
+        localStorage.setItem("loggedInUser", email);
+        alert("✅ Login successful!");
+        closeAuthModal();
+      } else {
+        alert("❌ Invalid email or password.");
+      }
+    }
+
+    function registerUser() {
+      const email = document.getElementById("authEmail").value;
+      const password = document.getElementById("authPassword").value;
+      if (!email || !password) return alert("❗ Fill both fields.");
+      let users = JSON.parse(localStorage.getItem("users") || "{}");
+
+      if (users[email]) {
+        alert("⚠️ Email already registered.");
+      } else {
+        users[email] = password;
+        localStorage.setItem("users", JSON.stringify(users));
+        alert("✅ Registered. You can log in now.");
+      }
+    }
+
+    window.onload = function () {
+      const user = localStorage.getItem("loggedInUser");
+      if (!user) openAuthModal();
+    };
+
+    document.querySelectorAll(".category-card").forEach(card => {
+      card.addEventListener("click", function (e) {
+        e.preventDefault();
+        if (confirm("🔔 Leaving site. Continue?")) {
+          window.open(this.href, "_blank");
+        }
+      });
+    });
+
     function searchResources() {
       const input = document.getElementById("searchInput").value.toLowerCase();
       const cards = document.querySelectorAll(".category-card");
       const resultsContainer = document.getElementById("searchResults");
       resultsContainer.innerHTML = "";
 
-      if (input === "") return;
-
+      if (!input) return;
       let found = false;
 
       cards.forEach(card => {
-        // Get the label text from the <p> inside the card
         const label = card.querySelector("p").textContent.toLowerCase();
-
         if (label.includes(input)) {
           found = true;
-          const link = card.href;
-          resultsContainer.innerHTML += `
-            <div>
-              <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
-            </div>
-          `;
+          resultsContainer.innerHTML += `<div><a href="${card.href}" target="_blank">${card.querySelector("p").textContent}</a></div>`;
         }
       });
 
       if (!found) {
-        resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
+        resultsContainer.innerHTML = "<p style='text-align:center;color:#aaa;'>No results found.</p>";
       }
     }
   </script>
-
 </body>
 </html>
