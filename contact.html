@@ -385,6 +385,104 @@
   <div id="searchResults"></div>
   <div class="contact-container">
     <h1>Contact Us</h1>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .contact-container {
+      background: #111;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 20px #00c6ff88;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00c6ff;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00c6ffaa;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #00d4ff;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #00aaff;
+      background-color: #222;
+      color: #fff;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #00c6ff;
+      box-shadow: 0 0 8px #00c6ffbb;
+    }
+
+    button {
+      width: 100%;
+      background-color: #00c6ff;
+      border: none;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #000;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #008fc7;
+      color: #fff;
+    }
+
+    #statusMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    #statusMessage.success {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    #statusMessage.error {
+      color: #f00;
+      text-shadow: 0 0 10px #f00;
+    }
+  </style>
+</head>
+<body>
+  <div class="contact-container">
+    
     <form id="contact-form">
       <label for="name">Name *</label>
       <input type="text" id="name" name="name" required />
@@ -407,15 +505,14 @@
   <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
   <script>
     // Initialize EmailJS with your public key
-    emailjs.init("XMPN1BECultZ3Fyrv"); // <-- REPLACE with your EmailJS public key
+    emailjs.init("CiAZblOXGYgxy6mZ210P6");
 
     const form = document.getElementById("contact-form");
     const statusMessage = document.getElementById("statusMessage");
 
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", function(event) {
       event.preventDefault();
 
-      // Prepare parameters to send
       const params = {
         name: form.name.value.trim(),
         email: form.email.value.trim(),
@@ -423,27 +520,27 @@
         message: form.message.value.trim(),
       };
 
-      // Basic front-end validation (extra)
       if (!params.name || !params.email || !params.subject || !params.message) {
         statusMessage.textContent = "Please fill in all required fields.";
         statusMessage.className = "error";
         return;
       }
 
-      // Send email using EmailJS
-      emailjs
-        .send("service_t5qcgjv", "template_f1tvom3", params) // <-- Replace these with your EmailJS Service ID and Template ID
-        .then(function (response) {
+      emailjs.send("service_t5qcgjv", "template_f1tvom3", params)
+        .then(function(response) {
           statusMessage.textContent = "✅ Message sent successfully!";
           statusMessage.className = "success";
           form.reset();
         })
-        .catch(function (error) {
+        .catch(function(error) {
           statusMessage.textContent = "❌ Failed to send message. Please try again later.";
           statusMessage.className = "error";
           console.error("EmailJS error:", error);
         });
     });
   </script>
+</body>
+</html>
+
 </body>
 </html>
