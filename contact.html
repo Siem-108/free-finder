@@ -2,27 +2,132 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact Us</title>
+  <style>
+    
+    body {
+      margin: 0;
+      background-color: #000;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      padding: 20px;
+    }
+
+    .contact-container {
+      background: #111;
+      padding: 30px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 20px #00c6ff88;
+    }
+
+    h1 {
+      text-align: center;
+      color: #00c6ff;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #00c6ffaa;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+      color: #00d4ff;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      border: 1px solid #00aaff;
+      background-color: #222;
+      color: #fff;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #00c6ff;
+      box-shadow: 0 0 8px #00c6ffbb;
+    }
+
+    button {
+      width: 100%;
+      background-color: #00c6ff;
+      border: none;
+      padding: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #000;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #008fc7;
+      color: #fff;
+    }
+
+    #statusMessage {
+      margin-top: 15px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    #statusMessage.success {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    #statusMessage.error {
+      color: #f00;
+      text-shadow: 0 0 10px #f00;
+    }
+  </style>
+</head>
+<body>
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "XMPN1BECultZ3Fyrv",
+      });
+   })();
+</script>
+<script src="script.js"></script>
+
   <title>Free Finder</title>
 
-  <!-- Google Font for modern look -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
-
   <style>
+    
     * {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      margin: 0;
       background-color: #000;
       color: #fff;
-      line-height: 1.6;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
     header {
+      display: flex;
+      flex-direction: column;
       background-color: #000;
       border-bottom: 1px solid #00aaff33;
     }
@@ -30,8 +135,7 @@
     .login-bar {
       width: 100%;
       text-align: right;
-      padding: 12px 24px;
-      background-color: #0a0a0a;
+      padding: 10px 20px;
     }
 
     .login-bar button {
@@ -39,40 +143,38 @@
       color: #000;
       padding: 10px 20px;
       border: none;
-      border-radius: 10px;
-      font-weight: 600;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
-    }
-
-    .login-bar button:hover {
-      background: #00e1ff;
     }
 
     .header-content {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      padding: 20px 40px;
       flex-wrap: wrap;
-      padding: 30px 40px;
+      gap: 20px;
     }
 
     .header-left {
       display: flex;
       align-items: center;
       gap: 20px;
-      flex-wrap: wrap;
+      flex-shrink: 0;
     }
 
     .logo-wrapper {
-      width: 160px;
-      height: 160px;
+      width: 220px;
+      height: 220px;
+      background-color: #000;
       border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 0 40px #00aaff77;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 0 50px #00aaff88;
+      overflow: hidden;
+      flex-shrink: 0;
     }
 
     .logo {
@@ -85,57 +187,63 @@
     .site-info {
       display: flex;
       flex-direction: column;
+      justify-content: center;
     }
 
     .site-title {
       font-size: 2.2rem;
-      font-weight: 800;
       color: #00d4ff;
-      text-shadow: 0 0 15px #00d4ff88;
+      font-weight: 800;
+      text-shadow: 0 0 15px #00d4ff44;
       margin-bottom: 10px;
     }
 
-    .search-bar input {
-      padding: 10px 16px;
-      border-radius: 30px;
-      border: 1px solid #00aaff;
-      background: #111;
-      color: #fff;
-      font-size: 1rem;
-      width: 100%;
-      max-width: 300px;
+    .search-bar {
+      max-width: 380px;
+      width: 150%;
     }
 
-    nav ul {
-      display: flex;
+    .search-bar input {
+      width: 100%;
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid #00aaff;
+      background-color: #111;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .header-right ul {
       list-style: none;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: flex;
+      gap: 20px;
       padding: 0;
       margin: 0;
+      flex-wrap: wrap;
     }
 
-    nav a {
-      text-decoration: none;
+    .header-right a {
       color: #00c6ff;
+      text-decoration: none;
       font-weight: 600;
-      padding: 8px 16px;
+      padding: 6px 12px;
       border-radius: 6px;
-      transition: 0.3s;
+      transition: all 0.3s ease;
     }
 
-    nav a:hover {
-      background-color: #00c6ff33;
+    .header-right a:hover {
       color: #fff;
+      background-color: #00c6ff22;
     }
 
     .content {
       text-align: center;
-      padding: 60px 20px;
+      padding: 40px 20px;
     }
 
     .content p {
-      font-size: 1.3rem;
+      font-size: 1.4rem;
       color: #ccc;
     }
 
@@ -144,11 +252,11 @@
     }
 
     section h2 {
-      font-size: 2rem;
+      font-size: 2.2rem;
       color: #00c6ff;
       margin-bottom: 30px;
       text-align: center;
-      text-shadow: 0 0 10px #00c6ff77;
+      text-shadow: 0 0 10px #00c6ff55;
     }
 
     .category-grid {
@@ -198,7 +306,7 @@
 
     #searchResults div {
       background: #111;
-      padding: 12px 20px;
+      padding: 10px 20px;
       border-radius: 10px;
       margin-bottom: 10px;
       border: 1px solid #00aaff44;
@@ -209,57 +317,11 @@
       text-decoration: none;
     }
 
-    /* Contact Form */
-    #contact form {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #111;
-      padding: 30px;
-      border-radius: 16px;
-      border: 1px solid #00aaff33;
-      box-shadow: 0 0 25px rgba(0, 170, 255, 0.1);
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .form-group input,
-    .form-group textarea {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #00aaff66;
-      background-color: #000;
-      color: #fff;
-      font-size: 1rem;
-    }
-
-    button[type="submit"] {
-      background: #00c6ff;
-      color: #000;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 10px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    button[type="submit"]:hover {
-      background: #00e6ff;
-    }
-
     @media (max-width: 768px) {
       .header-content {
         flex-direction: column;
         align-items: center;
+        padding: 20px;
       }
 
       .header-left {
@@ -267,11 +329,22 @@
         align-items: center;
       }
 
+      .logo-wrapper {
+        width: 170px;
+        height: 170px;
+        margin-bottom: 10px;
+      }
+
       .site-title {
+        font-size: 1.8rem;
         text-align: center;
       }
 
-      nav ul {
+      .header-right {
+        margin-top: 20px;
+      }
+
+      .header-right ul {
         justify-content: center;
       }
     }
@@ -310,33 +383,67 @@
   </header>
 
   <div id="searchResults"></div>
+  <div class="contact-container">
+    <h1>Contact Us</h1>
+    <form id="contact-form">
+      <label for="name">Name *</label>
+      <input type="text" id="name" name="name" required />
 
-  <section class="content">
-    <p>Welcome to Free Finder – your hub for curated AI tools, crypto resources, cultural content, and more!</p>
-  </section>
+      <label for="email">Email *</label>
+      <input type="email" id="email" name="email" required />
 
-  <section id="contact">
-    <h2>Contact Me</h2>
-    <form>
-      <div class="form-group">
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" required />
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required />
-      </div>
-      <div class="form-group">
-        <label for="subject">Subject</label>
-        <input type="text" id="subject" name="subject" required />
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-      </div>
-      <button type="submit" onclick="sendMail()">Send</button>
+      <label for="subject">Subject *</label>
+      <input type="text" id="subject" name="subject" required />
+
+      <label for="message">Message *</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit">Send Message</button>
     </form>
-  </section>
+    <div id="statusMessage"></div>
+  </div>
 
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    // Initialize EmailJS with your public key
+    emailjs.init("YOUR_PUBLIC_KEY"); // <-- REPLACE with your EmailJS public key
+
+    const form = document.getElementById("contact-form");
+    const statusMessage = document.getElementById("statusMessage");
+
+    form.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      // Prepare parameters to send
+      const params = {
+        name: form.name.value.trim(),
+        email: form.email.value.trim(),
+        subject: form.subject.value.trim(),
+        message: form.message.value.trim(),
+      };
+
+      // Basic front-end validation (extra)
+      if (!params.name || !params.email || !params.subject || !params.message) {
+        statusMessage.textContent = "Please fill in all required fields.";
+        statusMessage.className = "error";
+        return;
+      }
+
+      // Send email using EmailJS
+      emailjs
+        .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", params) // <-- Replace these with your EmailJS Service ID and Template ID
+        .then(function (response) {
+          statusMessage.textContent = "✅ Message sent successfully!";
+          statusMessage.className = "success";
+          form.reset();
+        })
+        .catch(function (error) {
+          statusMessage.textContent = "❌ Failed to send message. Please try again later.";
+          statusMessage.className = "error";
+          console.error("EmailJS error:", error);
+        });
+    });
+  </script>
 </body>
 </html>
