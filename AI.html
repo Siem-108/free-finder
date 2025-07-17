@@ -286,8 +286,8 @@
   </header>
 
   <div id="searchResults"></div>
-  <!-- 🧠 AI Tools -->
-  <section>
+
+   <section>
     <h2>🧠 AI Tools</h2>
     <div class="category-grid">
       <a href="https://chat.openai.com/" target="_blank" class="category-card">
@@ -400,37 +400,6 @@
       </a>
     </div>
   </section>
-
-  <script>
-    function searchResources() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const cards = document.querySelectorAll(".category-card");
-      const resultsContainer = document.getElementById("searchResults");
-      resultsContainer.innerHTML = "";
-
-      if (input === "") return;
-
-      let found = false;
-
-      cards.forEach(card => {
-        const label = card.querySelector("p").textContent.toLowerCase();
-        if (label.includes(input)) {
-          found = true;
-          const link = card.href;
-          resultsContainer.innerHTML += `
-            <div>
-              <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
-            </div>
-          `;
-        }
-      });
-
-      if (!found) {
-        resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
-      }
-    }
-  </script>
-
 
  <!-- 🔒 Stylish Login/Register Modal -->
   
