@@ -3,261 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  </script>
-<script type="text/javascript">
-   (function(){
-      emailjs.init({
-        publicKey: "XMPN1BECultZ3Fyrv",
-      });
-   })();
-</script>
-<script src="script.js"></script>
-
-  <title>Free Finder</title>
-
-  <style>
-    
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      background-color: #000;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    header {
-      display: flex;
-      flex-direction: column;
-      background-color: #000;
-      border-bottom: 1px solid #00aaff33;
-    }
-
-    .login-bar {
-      width: 100%;
-      text-align: right;
-      padding: 10px 20px;
-    }
-
-    .login-bar button {
-      background: #00c6ff;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-
-    .logo-wrapper {
-      width: 220px;
-      height: 220px;
-      background-color: #000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 50px #00aaff88;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .logo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .site-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .site-title {
-      font-size: 2.2rem;
-      color: #00d4ff;
-      font-weight: 800;
-      text-shadow: 0 0 15px #00d4ff44;
-      margin-bottom: 10px;
-    }
-
-    .search-bar {
-      max-width: 380px;
-      width: 150%;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 1px solid #00aaff;
-      background-color: #111;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    .header-right ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      padding: 0;
-      margin: 0;
-      flex-wrap: wrap;
-    }
-
-    .header-right a {
-      color: #00c6ff;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-    }
-
-    .header-right a:hover {
-      color: #fff;
-      background-color: #00c6ff22;
-    }
-
-    .content {
-      text-align: center;
-      padding: 40px 20px;
-    }
-
-    .content p {
-      font-size: 1.4rem;
-      color: #ccc;
-    }
-
-    section {
-      padding: 60px 20px;
-    }
-
-    section h2 {
-      font-size: 2.2rem;
-      color: #00c6ff;
-      margin-bottom: 30px;
-      text-align: center;
-      text-shadow: 0 0 10px #00c6ff55;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .category-card {
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(0, 170, 255, 0.2);
-      transition: all 0.3s ease-in-out;
-    }
-
-    .category-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0, 170, 255, 0.4);
-    }
-
-    .category-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .category-card p {
-      margin: 0;
-      padding: 16px;
-      text-align: center;
-      font-size: 1.1rem;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-    }
-
-    #searchResults {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    #searchResults div {
-      background: #111;
-      padding: 10px 20px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #00aaff44;
-    }
-
-    #searchResults a {
-      color: #00c6ff;
-      text-decoration: none;
-    }
-
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-      }
-
-      .header-left {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .logo-wrapper {
-        width: 170px;
-        height: 170px;
-        margin-bottom: 10px;
-      }
-
-      .site-title {
-        font-size: 1.8rem;
-        text-align: center;
-      }
-
-      .header-right {
-        margin-top: 20px;
-      }
-
-      .header-right ul {
-        justify-content: center;
-      }
-    }
-  </style>
+  <title>Free Finder - Culture</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="css/style.css">
+  
 </head>
 <body>
-
   <header>
     <div class="login-bar">
-      <button onclick="openAuthModal()">🔐 Login / Register</button>
+      <button id="authButton">🔐 Login / Register</button>
     </div>
 
     <div class="header-content">
@@ -268,7 +24,7 @@
         <div class="site-info">
           <div class="site-title">Free Finder</div>
           <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchResources()" />
+            <input type="text" id="searchInput" placeholder="Search..." />
           </div>
         </div>
       </div>
@@ -286,322 +42,147 @@
 
   <div id="searchResults"></div>
 
-  <!-- 🌍 Culture & Heritage Section -->
+  <!-- Culture & Heritage Section -->
   <section>
     <h2>🌍 Culture & Heritage</h2>
     <div class="category-grid">
-      <a href="https://artsandculture.google.com/" target="_blank" class="category-card">
+      <a href="https://artsandculture.google.com/" class="category-card">
         <img src="images/0022.jpg" alt="Virtual Museums" />
         <p>Virtual Museums</p>
       </a>
-      <a href="https://www.loc.gov/" target="_blank" class="category-card">
+      <a href="https://www.loc.gov/" class="category-card">
         <img src="images/0023.jpg" alt="Historical Archives" />
         <p>Historical Archives</p>
       </a>
-      <a href="https://www.openculture.com/free_museum_collections" target="_blank" class="category-card">
+      <a href="https://www.openculture.com/free_museum_collections" class="category-card">
         <img src="images/0024.jpg" alt="Cultural Collections" />
         <p>Cultural Collections</p>
       </a>
-      <a href="https://www.britishmuseum.org/collection" target="_blank" class="category-card">
+      <a href="https://www.britishmuseum.org/collection" class="category-card">
         <img src="images/0025.jpg" alt="British Museum" />
         <p>British Museum</p>
       </a>
-      <a href="https://www.metmuseum.org/art/collection" target="_blank" class="category-card">
+      <a href="https://www.metmuseum.org/art/collection" class="category-card">
         <img src="images/0026.jpg" alt="Metropolitan Art" />
         <p>Metropolitan Art</p>
       </a>
-      <a href="https://folkcloud.com/" target="_blank" class="category-card">
+      <a href="https://folkcloud.com/" class="category-card">
         <img src="images/0027.jpg" alt="Traditional Music" />
         <p>Traditional Music</p>
       </a>
-      <a href="https://www.omniglot.com/" target="_blank" class="category-card">
+      <a href="https://www.omniglot.com/" class="category-card">
         <img src="images/0028.jpg" alt="World Languages" />
         <p>World Languages</p>
       </a>
-      <a href="https://storyweaver.org.in/" target="_blank" class="category-card">
+      <a href="https://storyweaver.org.in/" class="category-card">
         <img src="images/0029.jpg" alt="StoryWeaver" />
         <p>StoryWeaver</p>
       </a>
     </div>
-     
-    <section>
-  <h2>🌙 Islamic Culture & Resources</h2>
-  <div class="category-grid">
-    <a href="https://quran.com/" target="_blank" class="category-card">
-      <img src="images/0030.jpg" alt="Quran" />
-      <p>Read the Quran (Multi-language)</p>
-    </a>
-    <a href="https://sunnah.com/" target="_blank" class="category-card">
-      <img src="images/0031.jpg" alt="Hadith Collections" />
-      <p>Hadith Collections</p>
-    </a>
-    <a href="https://www.islamicfinder.org/" target="_blank" class="category-card">
-      <img src="images/0032.jpg" alt="IslamicFinder" />
-      <p>Prayer Times & Resources</p>
-    </a>
-    <a href="https://www.alim.org/" target="_blank" class="category-card">
-      <img src="images/0033.jpg" alt="Islamic Encyclopedia" />
-      <p>Islamic Encyclopedia</p>
-    </a>
-  </div>
-</section>
-
-<section>
-  <h2>✝️ Christian Culture & Resources</h2>
-  <div class="category-grid">
-    <a href="https://www.biblegateway.com/" target="_blank" class="category-card">
-      <img src="images/0034.jpg" alt="Bible Gateway" />
-      <p>Bible (Multiple Versions)</p>
-    </a>
-    <a href="https://www.biblestudytools.com/" target="_blank" class="category-card">
-      <img src="images/0035.jpg" alt="Bible Study Tools" />
-      <p>Bible Study Tools</p>
-    </a>
-    <a href="https://www.vatican.va/" target="_blank" class="category-card">
-      <img src="images/0036.jpg" alt="The Vatican" />
-      <p>The Vatican Archives</p>
-    </a>
-    <a href="https://www.christianitytoday.com/" target="_blank" class="category-card">
-      <img src="images/0037.jpg" alt="Christian News & Culture" />
-      <p>Christian News & Culture</p>
-    </a>
-  </div>
-</section>
-<section>
-  <h2>🕉️ Hindu Culture & Resources</h2>
-  <div class="category-grid">
-    <a href="https://www.holy-bhagavad-gita.org/" target="_blank" class="category-card">
-      <img src="images/0038.jpg" alt="Bhagavad Gita" />
-      <p>Read the Bhagavad Gita</p>
-    </a>
-    <a href="https://www.sacred-texts.com/hin/" target="_blank" class="category-card">
-      <img src="images/0039.jpg" alt="Sacred Hindu Texts" />
-      <p>Sacred Hindu Texts</p>
-    </a>
-    <a href="https://iskcon.org/" target="_blank" class="category-card">
-      <img src="images/0040.jpg" alt="ISKCON" />
-      <p>ISKCON Resources</p>
-    </a>
-    <a href="https://www.drikpanchang.com/" target="_blank" class="category-card">
-      <img src="images/0041.jpg" alt="Hindu Calendar" />
-      <p>Hindu Calendar & Panchang</p>
-    </a>
-  </div>
-</section>
-
-<section>
-  <h2>🕎 Other Major Faiths & Cultures</h2>
-  <div class="category-grid">
-    <a href="https://www.jewishvirtuallibrary.org/" target="_blank" class="category-card">
-      <img src="images/0042.jpg" alt="Jewish Virtual Library" />
-      <p>Jewish Virtual Library</p>
-    </a>
-    <a href="https://www.buddhanet.net/" target="_blank" class="category-card">
-      <img src="images/0043.jpg" alt="BuddhaNet" />
-      <p>Buddhism (Texts & Teachings)</p>
-    </a>
-    <a href="https://www.sikhnet.com/" target="_blank" class="category-card">
-      <img src="images/0044.jpg" alt="SikhNet" />
-      <p>Sikh Culture & Gurbani</p>
-    </a>
-    <a href="https://plato.stanford.edu/" target="_blank" class="category-card">
-      <img src="images/0045.jpg" alt="Philosophy Encyclopedia" />
-      <p>Global Philosophies</p>
-    </a>
-  </div>
-</section>
-
   </section>
 
- <!-- 🔒 Stylish Login/Register Modal -->
-  
-<div id="authModal" style="
-  display: none;
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: rgba(0, 0, 0, 0.85);
-  z-index: 1000;
-  justify-content: center;
-  align-items: center;
-  font-family: 'Segoe UI', sans-serif;
-">
+  <section>
+    <h2>🌙 Islamic Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://quran.com/" class="category-card">
+        <img src="images/0030.jpg" alt="Quran" />
+        <p>Read the Quran (Multi-language)</p>
+      </a>
+      <a href="https://sunnah.com/" class="category-card">
+        <img src="images/0031.jpg" alt="Hadith Collections" />
+        <p>Hadith Collections</p>
+      </a>
+      <a href="https://www.islamicfinder.org/" class="category-card">
+        <img src="images/0032.jpg" alt="IslamicFinder" />
+        <p>Prayer Times & Resources</p>
+      </a>
+      <a href="https://www.alim.org/" class="category-card">
+        <img src="images/0033.jpg" alt="Islamic Encyclopedia" />
+        <p>Islamic Encyclopedia</p>
+      </a>
+    </div>
+  </section>
 
-  <div style="
-    background: #1a1a1a;
-    padding: 40px 30px;
-    border-radius: 16px;
-    border: 2px solid #00c6ff;
-    width: 90%;
-    max-width: 460px;
-    color: #fff;
-    box-shadow: 0 0 25px rgba(0,0,0,0.6);
-    animation: fadeIn 0.3s ease-in-out;
-  ">
-    <h2 style="margin: 0 0 20px; color: #00c6ff; text-align: center; font-size: 28px;">
-      🔐 Login or Register
+  <section>
+    <h2>✝️ Christian Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://www.biblegateway.com/" class="category-card">
+        <img src="images/0034.jpg" alt="Bible Gateway" />
+        <p>Bible (Multiple Versions)</p>
+      </a>
+      <a href="https://www.biblestudytools.com/" class="category-card">
+        <img src="images/0035.jpg" alt="Bible Study Tools" />
+        <p>Bible Study Tools</p>
+      </a>
+      <a href="https://www.vatican.va/" class="category-card">
+        <img src="images/0036.jpg" alt="The Vatican" />
+        <p>The Vatican Archives</p>
+      </a>
+      <a href="https://www.christianitytoday.com/" class="category-card">
+        <img src="images/0037.jpg" alt="Christian News & Culture" />
+        <p>Christian News & Culture</p>
+      </a>
+    </div>
+  </section>
 
-    </h2>
+  <section>
+    <h2>🕉️ Hindu Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://www.holy-bhagavad-gita.org/" class="category-card">
+        <img src="images/0038.jpg" alt="Bhagavad Gita" />
+        <p>Read the Bhagavad Gita</p>
+      </a>
+      <a href="https://www.sacred-texts.com/hin/" class="category-card">
+        <img src="images/0039.jpg" alt="Sacred Hindu Texts" />
+        <p>Sacred Hindu Texts</p>
+      </a>
+      <a href="https://iskcon.org/" class="category-card">
+        <img src="images/0040.jpg" alt="ISKCON" />
+        <p>ISKCON Resources</p>
+      </a>
+      <a href="https://www.drikpanchang.com/" class="category-card">
+        <img src="images/0041.jpg" alt="Hindu Calendar" />
+        <p>Hindu Calendar & Panchang</p>
+      </a>
+    </div>
+  </section>
 
-    <label style="font-weight: bold; display: block; margin-bottom: 6px;">Email</label>
-    <input type="email" id="authEmail" placeholder="you@example.com" style="
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 18px;
-      border-radius: 8px;
-      border: 1px solid #00c6ff;
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-    " />
+  <section>
+    <h2>🕎 Other Major Faiths & Cultures</h2>
+    <div class="category-grid">
+      <a href="https://www.jewishvirtuallibrary.org/" class="category-card">
+        <img src="images/0042.jpg" alt="Jewish Virtual Library" />
+        <p>Jewish Virtual Library</p>
+      </a>
+      <a href="https://www.buddhanet.net/" class="category-card">
+        <img src="images/0043.jpg" alt="BuddhaNet" />
+        <p>Buddhism (Texts & Teachings)</p>
+      </a>
+      <a href="https://www.sikhnet.com/" class="category-card">
+        <img src="images/0044.jpg" alt="SikhNet" />
+        <p>Sikh Culture & Gurbani</p>
+      </a>
+      <a href="https://plato.stanford.edu/" class="category-card">
+        <img src="images/0045.jpg" alt="Philosophy Encyclopedia" />
+        <p>Global Philosophies</p>
+      </a>
+    </div>
+  </section>
 
-    <label style="font-weight: bold; display: block; margin-bottom: 6px;">Password</label>
-    <input type="password" id="authPassword" placeholder="Enter your password" style="
-      width: 100%;
-      padding: 12px;
-      margin-bottom: 30px;
-      border-radius: 8px;
-      border: 1px solid #00c6ff;
-      background: #000;
-      color: #fff;
-      font-size: 16px;
-    " />
-
-    <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-      <button onclick="loginUser()" style="
-        flex: 1;
-        padding: 12px;
-        background: #00c6ff;
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">🔓 Login</button>
-
-      <button onclick="registerUser()" style="
-        flex: 1;
-        padding: 12px;
-        background: #00ffb3;
-        color: #000;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">📝 Register</button>
-
-      <button onclick="closeAuthModal()" style="
-        flex: 1;
-        padding: 12px;
-        background: #ff0033;
-        color: #fff;
-        border: none;
-        border-radius: 8px;
-        font-weight: bold;
-        cursor: pointer;
-      ">✖ Close</button>
+  <!-- Login/Register Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <h2>🔐 Login or Register</h2>
+      <label>Email</label>
+      <input type="email" id="authEmail" placeholder="you@example.com" />
+      <label>Password</label>
+      <input type="password" id="authPassword" placeholder="Enter password" />
+      <div class="modal-buttons">
+        <button id="loginBtn">🔓 Login</button>
+        <button id="registerBtn">📝 Register</button>
+        <button id="closeModalBtn">✖ Close</button>
+      </div>
     </div>
   </div>
-</div>
-
-<!-- 🔧 Script for Login/Register Logic -->
-<script>
-  function openAuthModal() {
-    document.getElementById("authModal").style.display = "flex";
-  }
-
-  function closeAuthModal() {
-    document.getElementById("authModal").style.display = "none";
-  }
-
-  function loginUser() {
-    const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
-
-    const stored = JSON.parse(localStorage.getItem("users") || "{}");
-    if (stored[email] && stored[email] === password) {
-      localStorage.setItem("loggedInUser", email);
-      alert("✅ Login successful! A confirmation email was sent.");
-      console.log("📩 Confirmation email sent to:", email);
-      closeAuthModal();
-    } else {
-      alert("❌ Invalid email or password.");
-    }
-  }
-
-  function registerUser() {
-    const email = document.getElementById("authEmail").value;
-    const password = document.getElementById("authPassword").value;
-
-    if (!email || !password) {
-      alert("❗ Please fill in both fields.");
-      return;
-    }
-
-    let users = JSON.parse(localStorage.getItem("users") || "{}");
-    if (users[email]) {
-      alert("⚠️ Email already registered.");
-    } else {
-      users[email] = password;
-      localStorage.setItem("users", JSON.stringify(users));
-      alert("✅ Registered successfully. You can now log in.");
-    }
-  }
-
-  window.onload = function () {
-    const user = localStorage.getItem("loggedInUser");
-    if (!user) {
-      document.getElementById("authModal").style.display = "flex";
-    }
-  };
-
-  document.querySelectorAll(".category-card").forEach(card => {
-    card.addEventListener("click", function (e) {
-      e.preventDefault();
-      const confirmed = confirm("🔔 Reminder: You are about to visit an external site. Proceed?");
-      if (confirmed) {
-        window.open(this.href, "_blank");
-      }
-    });
-  });
-
-  function searchResources() {
-    const input = document.getElementById("searchInput").value.toLowerCase();
-    const cards = document.querySelectorAll(".category-card");
-    const resultsContainer = document.getElementById("searchResults");
-    resultsContainer.innerHTML = "";
-
-    if (input === "") return;
-
-    let found = false;
-
-    cards.forEach(card => {
-      const label = card.querySelector("p").textContent.toLowerCase();
-      if (label.includes(input)) {
-        found = true;
-        const link = card.href;
-        resultsContainer.innerHTML += `
-          <div>
-            <a href="${link}" target="_blank">${card.querySelector("p").textContent}</a>
-          </div>
-        `;
-      }
-    });
-
-    if (!found) {
-      resultsContainer.innerHTML = "<p style='color:#ccc; text-align:center;'>No results found.</p>";
-    }
-  }
-</script>
-
-<!-- 🔥 Optional Animation -->
-<style>
-  @keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-  }
-</style>
-
-
 </body>
 </html>

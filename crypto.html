@@ -4,245 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Free Finder</title>
+  <link rel="stylesheet" href="styles.css">
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init({ publicKey: "XMPN1BECultZ3Fyrv" });
-    })();
-  </script>
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+  <script src="script.js" defer></script>
+  <link rel="stylesheet" href="css/style.css">
 
-    body {
-      margin: 0;
-      background-color: #000;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    header {
-      display: flex;
-      flex-direction: column;
-      background-color: #000;
-      border-bottom: 1px solid #00aaff33;
-    }
-
-    .login-bar {
-      width: 100%;
-      text-align: right;
-      padding: 10px 20px;
-    }
-
-    .login-bar button {
-      background: #00c6ff;
-      color: #000;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .header-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 40px;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-
-    .header-left {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-shrink: 0;
-    }
-
-    .logo-wrapper {
-      width: 220px;
-      height: 220px;
-      background-color: #000;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 50px #00aaff88;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .logo {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 50%;
-    }
-
-    .site-info {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .site-title {
-      font-size: 2.2rem;
-      color: #00d4ff;
-      font-weight: 800;
-      text-shadow: 0 0 15px #00d4ff44;
-      margin-bottom: 10px;
-    }
-
-    .search-bar {
-      max-width: 380px;
-      width: 150%;
-    }
-
-    .search-bar input {
-      width: 100%;
-      padding: 8px 14px;
-      border-radius: 20px;
-      border: 1px solid #00aaff;
-      background-color: #111;
-      color: #fff;
-      font-size: 0.95rem;
-      outline: none;
-    }
-
-    .header-right ul {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      padding: 0;
-      margin: 0;
-      flex-wrap: wrap;
-    }
-
-    .header-right a {
-      color: #00c6ff;
-      text-decoration: none;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 6px;
-      transition: all 0.3s ease;
-    }
-
-    .header-right a:hover {
-      color: #fff;
-      background-color: #00c6ff22;
-    }
-
-    section {
-      padding: 60px 20px;
-    }
-
-    section h2 {
-      font-size: 2.2rem;
-      color: #00c6ff;
-      margin-bottom: 30px;
-      text-align: center;
-      text-shadow: 0 0 10px #00c6ff55;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      max-width: 1400px;
-      margin: 0 auto;
-    }
-
-    .category-card {
-      text-decoration: none;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(0, 170, 255, 0.2);
-      transition: all 0.3s ease-in-out;
-    }
-
-    .category-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0, 170, 255, 0.4);
-    }
-
-    .category-card img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-    }
-
-    .category-card p {
-      margin: 0;
-      padding: 16px;
-      text-align: center;
-      font-size: 1.1rem;
-      background: rgba(0, 0, 0, 0.8);
-      color: #fff;
-    }
-
-    #searchResults {
-      padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    #searchResults div {
-      background: #111;
-      padding: 10px 20px;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #00aaff44;
-    }
-
-    #searchResults a {
-      color: #00c6ff;
-      text-decoration: none;
-    }
-
-    @media (max-width: 768px) {
-      .header-content {
-        flex-direction: column;
-        align-items: center;
-        padding: 20px;
-      }
-
-      .header-left {
-        flex-direction: column;
-        align-items: center;
-      }
-
-      .logo-wrapper {
-        width: 170px;
-        height: 170px;
-        margin-bottom: 10px;
-      }
-
-      .site-title {
-        font-size: 1.8rem;
-        text-align: center;
-      }
-
-      .header-right {
-        margin-top: 20px;
-      }
-
-      .header-right ul {
-        justify-content: center;
-      }
-    }
-  </style>
 </head>
 <body>
-
   <!-- Header -->
   <header>
     <div class="login-bar">
-      <button onclick="openAuthModal()">🔐 Login / Register</button>
+      <button id="authButton">🔐 Login / Register</button>
     </div>
 
     <div class="header-content">
@@ -253,7 +25,7 @@
         <div class="site-info">
           <div class="site-title">Free Finder</div>
           <div class="search-bar">
-            <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchResources()" />
+            <input type="text" id="searchInput" placeholder="Search..." />
           </div>
         </div>
       </div>
@@ -263,7 +35,7 @@
           <li><a href="crypto.html">CRYPTO</a></li>
           <li><a href="Home.html">HOME</a></li>
           <li><a href="culture.html">CULTURE</a></li>
-          <li><a href="contact.html">CONTACT US</a></li>
+          <li><a href="#contact">CONTACT US</a></li>
         </ul>
       </nav>
     </div>
@@ -282,7 +54,6 @@
       <a href="https://topdocumentaryfilms.com/" class="category-card"><img src="images/0007.jpg" alt="Docs"><p>Free Documentaries</p></a>
       <a href="https://freemusicarchive.org" class="category-card"><img src="images/0003.jpg" alt="Free Music" /><p>Free Music</p></a>
       <a href="https://www.myabandonware.com" class="category-card"><img src="images/0002.jpg" alt="Free Games" /><p>Free Games</p></a>
-   
     </div>
   </section>
 
@@ -319,95 +90,22 @@
     </div>
   </section>
 
-  <!-- 🔐 Login/Register Modal -->
-  <div id="authModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:1000;justify-content:center;align-items:center;">
-    <div style="background:#1a1a1a;padding:40px;border-radius:16px;border:2px solid #00c6ff;width:90%;max-width:460px;color:#fff;">
-      <h2 style="text-align:center;color:#00c6ff;">🔐 Login or Register</h2>
+ 
+
+  <!-- Auth Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <h2>🔐 Login or Register</h2>
       <label>Email</label>
-      <input type="email" id="authEmail" placeholder="you@example.com" style="width:100%;padding:10px;margin-bottom:12px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
+      <input type="email" id="authEmail" placeholder="you@example.com" />
       <label>Password</label>
-      <input type="password" id="authPassword" placeholder="Enter password" style="width:100%;padding:10px;margin-bottom:20px;background:#000;border:1px solid #00c6ff;border-radius:8px;color:#fff;" />
-      <div style="display:flex;gap:10px;flex-wrap:wrap;">
-        <button onclick="loginUser()" style="flex:1;background:#00c6ff;color:#000;padding:10px;border:none;border-radius:8px;">🔓 Login</button>
-        <button onclick="registerUser()" style="flex:1;background:#00ffb3;color:#000;padding:10px;border:none;border-radius:8px;">📝 Register</button>
-        <button onclick="closeAuthModal()" style="flex:1;background:#ff0033;color:#fff;padding:10px;border:none;border-radius:8px;">✖ Close</button>
+      <input type="password" id="authPassword" placeholder="Enter password" />
+      <div class="modal-buttons">
+        <button id="loginBtn">🔓 Login</button>
+        <button id="registerBtn">📝 Register</button>
+        <button id="closeModalBtn">✖ Close</button>
       </div>
     </div>
   </div>
-
-  <script>
-    function openAuthModal() {
-      document.getElementById("authModal").style.display = "flex";
-    }
-
-    function closeAuthModal() {
-      document.getElementById("authModal").style.display = "none";
-    }
-
-    function loginUser() {
-      const email = document.getElementById("authEmail").value;
-      const password = document.getElementById("authPassword").value;
-      const stored = JSON.parse(localStorage.getItem("users") || "{}");
-
-      if (stored[email] && stored[email] === password) {
-        localStorage.setItem("loggedInUser", email);
-        alert("✅ Login successful!");
-        closeAuthModal();
-      } else {
-        alert("❌ Invalid email or password.");
-      }
-    }
-
-    function registerUser() {
-      const email = document.getElementById("authEmail").value;
-      const password = document.getElementById("authPassword").value;
-      if (!email || !password) return alert("❗ Fill both fields.");
-      let users = JSON.parse(localStorage.getItem("users") || "{}");
-
-      if (users[email]) {
-        alert("⚠️ Email already registered.");
-      } else {
-        users[email] = password;
-        localStorage.setItem("users", JSON.stringify(users));
-        alert("✅ Registered. You can log in now.");
-      }
-    }
-
-    window.onload = function () {
-      const user = localStorage.getItem("loggedInUser");
-      if (!user) openAuthModal();
-    };
-
-    document.querySelectorAll(".category-card").forEach(card => {
-      card.addEventListener("click", function (e) {
-        e.preventDefault();
-        if (confirm("🔔 Leaving site. Continue?")) {
-          window.open(this.href, "_blank");
-        }
-      });
-    });
-
-    function searchResources() {
-      const input = document.getElementById("searchInput").value.toLowerCase();
-      const cards = document.querySelectorAll(".category-card");
-      const resultsContainer = document.getElementById("searchResults");
-      resultsContainer.innerHTML = "";
-
-      if (!input) return;
-      let found = false;
-
-      cards.forEach(card => {
-        const label = card.querySelector("p").textContent.toLowerCase();
-        if (label.includes(input)) {
-          found = true;
-          resultsContainer.innerHTML += `<div><a href="${card.href}" target="_blank">${card.querySelector("p").textContent}</a></div>`;
-        }
-      });
-
-      if (!found) {
-        resultsContainer.innerHTML = "<p style='text-align:center;color:#aaa;'>No results found.</p>";
-      }
-    }
-  </script>
 </body>
 </html>
