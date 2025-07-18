@@ -1,7 +1,7 @@
 // Initialize EmailJS
 (function() {
   emailjs.init({
-    publicKey: "CiAZblOXGYgxy6mZ210P6",
+    publicKey: "XMPN1BECultZ3Fyrv",
     blockHeadless: true,
     limitRate: {
       id: 'app',
