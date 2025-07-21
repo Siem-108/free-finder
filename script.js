@@ -56,7 +56,8 @@ function sendMail(event) {
     name: document.getElementById('name').value.trim(),
     email: document.getElementById('email').value.trim(),
     subject: document.getElementById('subject').value.trim(),
-    message: document.getElementById('message').value.trim()
+    message: document.getElementById('message').value.trim(),
+    logo_url: "https://i.imgur.com/31ZeO6z.png"
   };
 
   // Validate inputs
