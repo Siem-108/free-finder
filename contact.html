@@ -10,17 +10,53 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header>
-    <div class="login-bar">
-      <button id="authButton">🔐 Login / Register</button>
-    </div>
+  <!-- Add this right after <body> tag -->
+<div class="login-bar">
+  <div class="auth-container">
+    <span id="userGreeting"></span>
+    <button id="authButton" class="btn-login">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+    <button id="logoutBtn" class="btn-logout">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+
+<!-- Add this before closing </body> tag -->
+<div id="authModal" class="modal">
+  <div class="modal-content">
+    <button id="closeModalBtn" class="btn-close">
+      <i class="fas fa-times"></i>
+    </button>
+    
+    <h2>Admin Login</h2>
+    
+    <form id="authForm">
+      <div class="form-group">
+        <label for="authEmail">Email</label>
+        <input type="email" id="authEmail" required placeholder="admin@freefinder.com">
+      </div>
+      
+      <div class="form-group">
+        <label for="authPassword">Password</label>
+        <input type="password" id="authPassword" required placeholder="••••••••">
+      </div>
+      
+      <div id="authError" class="error-message"></div>
+      
+      <button type="submit" id="loginBtn" class="btn-submit">
+        <i class="fas fa-lock"></i> Login
+      </button>
+    </form>
+  </div>
+</div>
 
     <div class="header-content">
       <div class="header-left">
         <a href="Home.html" class="logo-wrapper">
           
           <img src="images/0000.jpg" alt="Site Logo" class="logo" />
-          <img src="{{logo_url}}" alt="Skull Gear Logo" class="logo" />
           
 
         </a>
@@ -70,21 +106,6 @@
     </div>
   </main>
 
-  <!-- Login/Register Modal -->
-  <div id="authModal" class="modal">
-    <div class="modal-content">
-      <h2>🔐 Login or Register</h2>
-      <label>Email</label>
-      <input type="email" id="authEmail" placeholder="you@example.com" />
-      <label>Password</label>
-      <input type="password" id="authPassword" placeholder="Enter password" />
-      <div class="modal-buttons">
-        <button id="loginBtn">🔓 Login</button>
-        <button id="registerBtn">📝 Register</button>
-        <button id="closeModalBtn">✖ Close</button>
-      </div>
-    </div>
-  </div>
-  
+
 </body>
 </html>
