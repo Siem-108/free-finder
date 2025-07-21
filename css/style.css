@@ -1,4 +1,23 @@
 /* ===== Global Styles ===== */
+/* Logo Styling - Original Position */
+#site-logo {
+  width: 150px; /* Original width */
+  height: auto; /* Maintain aspect ratio */
+  position: absolute; /* Or 'relative' as it was */
+  top: 20px; /* Original position */
+  left: 30px; /* Original position */
+  z-index: 100; /* Ensure it stays on top */
+  transition: all 0.3s ease; /* Smooth resizing */
+}
+
+/* For responsive behavior */
+@media (max-width: 768px) {
+  #site-logo {
+    width: 120px;
+    top: 15px;
+    left: 15px;
+  }
+}
 * {
   box-sizing: border-box;
   margin: 0;
@@ -24,8 +43,8 @@ header {
 
 .login-bar {
   width: 100%;
-  text-align: right;
-  padding: 10px 20px;
+  margin: 0 auto 10px;
+  display: block;
 }
 
 .login-bar button {
