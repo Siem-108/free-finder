@@ -1,4 +1,4 @@
-// Initialize EmailJS
+// Initialize EmailJS with enhanced security
 (function() {
   emailjs.init({
     publicKey: "XMPN1BECultZ3Fyrv",
@@ -19,6 +19,7 @@ const registerBtn = document.getElementById('registerBtn');
 const closeModalBtn = document.getElementById('closeModalBtn');
 const authModal = document.getElementById('authModal');
 const searchInput = document.getElementById('searchInput');
+const adminDashboard = document.getElementById('adminDashboard'); // New element for admin interface
 
 // Event Listeners
 if (contactForm) {
@@ -45,50 +46,42 @@ if (searchInput) {
   searchInput.addEventListener('keyup', searchResources);
 }
 
-// Contact Form Function - UPDATED with proper template handling
+// Enhanced Contact Form Function
 function sendMail(event) {
   event.preventDefault();
 
   const serviceID = 'service_t5qcgjv';
-  const adminTemplateID = 'template_f1tvom3';      // Message to admin
-  const userReplyTemplateID = 'template_qawufof';  // Reply to user
+  const adminTemplateID = 'template_f1tvom3'; // Only sending to admin now
 
-  // Get form values
-  const userName = document.getElementById('name').value.trim();
-  const userEmail = document.getElementById('email').value.trim();
-  const userSubject = document.getElementById('subject').value.trim();
-  const userMessage = document.getElementById('message').value.trim();
+  // Get and validate form values
+  const formData = {
+    userName: document.getElementById('name').value.trim(),
+    userEmail: document.getElementById('email').value.trim(),
+    userSubject: document.getElementById('subject').value.trim(),
+    userMessage: document.getElementById('message').value.trim()
+  };
 
-  // Validate inputs
-  if (!userName || !userEmail || !userSubject || !userMessage) {
+  // Enhanced validation
+  if (!Object.values(formData).every(Boolean)) {
     showStatusMessage('Please fill in all required fields', 'error');
     return;
   }
 
-  // Email format check
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.userEmail)) {
     showStatusMessage('Please enter a valid email address', 'error');
     return;
   }
 
-  // Prepare parameters
+  // Prepare admin email parameters
   const adminParams = {
-    from_name: userName,
-    reply_to: userEmail,
-    to_email: "yourbusiness@email.com",  // Your business email
-    subject: userSubject,
-    message: userMessage,
+    from_name: formData.userName,
+    reply_to: formData.userEmail,
+    to_email: "yourbusiness@email.com",
+    subject: `New Contact: ${formData.userSubject}`,
+    message: formData.userMessage,
     logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    received_at: new Date().toLocaleString()
-  };
-
-  const userParams = {
-    name: userName,
-    email: userEmail,
-    subject: "Thank you for contacting us!",
-    message: "We've received your message and will get back to you soon.",
-    logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    business_email: "yourbusiness@email.com"
+    received_at: new Date().toLocaleString(),
+    user_ip: "80.233.40.87"
   };
 
   const submitBtn = contactForm.querySelector('button[type="submit"]');
@@ -96,15 +89,16 @@ function sendMail(event) {
   submitBtn.textContent = 'Sending...';
   submitBtn.disabled = true;
 
-  // Send both emails sequentially
+  // Send only the admin email
   emailjs.send(serviceID, adminTemplateID, adminParams)
     .then(() => {
-      // Only send user reply if admin email was successful
-      return emailjs.send(serviceID, userReplyTemplateID, userParams);
-    })
-    .then(() => {
-      showStatusMessage('✅ Message sent! You\'ll receive a confirmation shortly.', 'success');
+      showStatusMessage('✅ Message sent! We\'ll reply soon.', 'success');
       contactForm.reset();
+      
+      // Store message in localStorage for admin dashboard
+      if (adminDashboard) {
+        storeMessageForAdmin(formData);
+      }
     })
     .catch((error) => {
       console.error('EmailJS Error:', error);
@@ -116,41 +110,80 @@ function sendMail(event) {
     });
 }
 
-// MANUAL REPLY FUNCTION (for when you want to send a personalized response)
-function sendManualReply(userEmail, userName, replyMessage) {
+// Enhanced Manual Reply Function
+async function sendManualReply(userEmail, userName, replyMessage) {
   const serviceID = 'service_t5qcgjv';
   const userReplyTemplateID = 'template_qawufof';
 
-  const replyParams = {
-    name: userName,
-    email: userEmail,
-    subject: "Re: Your Inquiry",
-    message: replyMessage,
-    logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    reply_date: new Date().toLocaleDateString()
-  };
+  try {
+    const replyParams = {
+      name: userName,
+      email: userEmail,
+      subject: "Re: Your Inquiry",
+      message: replyMessage,
+      logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
+      reply_date: new Date().toLocaleDateString(),
+      reply_time: new Date().toLocaleTimeString()
+    };
 
-  return emailjs.send(serviceID, userReplyTemplateID, replyParams)
-    .then(() => true)
-    .catch(error => {
-      console.error('Reply failed:', error);
-      return false;
-    });
+    await emailjs.send(serviceID, userReplyTemplateID, replyParams);
+    return { success: true, message: 'Reply sent successfully!' };
+  } catch (error) {
+    console.error('Reply failed:', error);
+    return { success: false, message: 'Failed to send reply. Please try again.' };
+  }
 }
 
-// Show status message
-function showStatusMessage(message, type) {
-  if (!statusMessage) return;
+// New: Store messages for admin dashboard
+function storeMessageForAdmin(messageData) {
+  const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+  messages.push({
+    ...messageData,
+    received_at: new Date().toISOString(),
+    replied: false
+  });
+  localStorage.setItem('contactMessages', JSON.stringify(messages));
+}
+
+// New: Load messages for admin dashboard
+function loadAdminMessages() {
+  if (!adminDashboard) return;
   
-  statusMessage.textContent = message;
-  statusMessage.className = type;
-  statusMessage.classList.add('show');
-  setTimeout(() => {
-    statusMessage.classList.remove('show');
-  }, 5000);
+  const messages = JSON.parse(localStorage.getItem('contactMessages') || '[]');
+  adminDashboard.innerHTML = messages.map((msg, index) => `
+    <div class="message-card ${msg.replied ? 'replied' : ''}">
+      <h3>From: ${msg.userName} (${msg.userEmail})</h3>
+      <p><strong>Subject:</strong> ${msg.userSubject}</p>
+      <p>${msg.userMessage}</p>
+      <small>Received: ${new Date(msg.received_at).toLocaleString()}</small>
+      ${!msg.replied ? `
+        <textarea id="reply-${index}" placeholder="Type your reply..."></textarea>
+        <button onclick="adminSendReply(${index}, '${msg.userEmail}', '${msg.userName}')">Send Reply</button>
+      ` : '<span class="replied-badge">Replied</span>'}
+    </div>
+  `).join('');
 }
 
-// Auth Functions
+// New: Admin reply function
+async function adminSendReply(index, userEmail, userName) {
+  const replyText = document.getElementById(`reply-${index}`).value.trim();
+  if (!replyText) {
+    alert('Please enter a reply message');
+    return;
+  }
+
+  const result = await sendManualReply(userEmail, userName, replyText);
+  if (result.success) {
+    // Update message status
+    const messages = JSON.parse(localStorage.getItem('contactMessages'));
+    messages[index].replied = true;
+    localStorage.setItem('contactMessages', JSON.stringify(messages));
+    loadAdminMessages();
+  }
+  alert(result.message);
+}
+
+// Enhanced Auth Functions
 function openAuthModal() {
   authModal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -162,7 +195,7 @@ function closeAuthModal() {
 }
 
 function loginUser() {
-  const email = document.getElementById('authEmail').value;
+  const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
   const stored = JSON.parse(localStorage.getItem('users') || '{}');
 
@@ -170,17 +203,23 @@ function loginUser() {
     localStorage.setItem('loggedInUser', email);
     alert('✅ Login successful!');
     closeAuthModal();
+    if (adminDashboard) loadAdminMessages();
   } else {
     alert('❌ Invalid email or password.');
   }
 }
 
 function registerUser() {
-  const email = document.getElementById('authEmail').value;
+  const email = document.getElementById('authEmail').value.trim();
   const password = document.getElementById('authPassword').value;
 
   if (!email || !password) {
     alert('❗ Please fill in both fields.');
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('❗ Please enter a valid email address.');
     return;
   }
 
@@ -194,7 +233,7 @@ function registerUser() {
   }
 }
 
-// Search Functionality
+// Enhanced Search Functionality
 function searchResources() {
   const input = searchInput.value.toLowerCase();
   const cards = document.querySelectorAll('.category-card');
@@ -204,14 +243,14 @@ function searchResources() {
   if (!input) return;
 
   let found = false;
-
   cards.forEach(card => {
     const label = card.querySelector('p').textContent.toLowerCase();
     if (label.includes(input)) {
       found = true;
       resultsContainer.innerHTML += `
-        <div>
+        <div class="search-result">
           <a href="${card.href}" target="_blank">${card.querySelector('p').textContent}</a>
+          <p class="description">${card.dataset.description || ''}</p>
         </div>
       `;
     }
@@ -229,15 +268,20 @@ document.addEventListener('DOMContentLoaded', function() {
     openAuthModal();
   }
 
-  // External link confirm
+  // Enhanced external link confirmation
   document.querySelectorAll('.category-card').forEach(card => {
     card.addEventListener('click', function(e) {
       e.preventDefault();
-      if (confirm('🔔 You are leaving Free Finder. Continue to external site?')) {
+      if (confirm(`🔔 You are leaving Free Finder to visit: ${this.href}\n\nContinue?`)) {
         window.open(this.href, '_blank');
       }
     });
   });
+
+  // Load admin messages if on dashboard
+  if (adminDashboard && user) {
+    loadAdminMessages();
+  }
 });
 
 // Close modal when clicking outside
@@ -245,5 +289,4 @@ window.addEventListener('click', function(event) {
   if (event.target === authModal) {
     closeAuthModal();
   }
-  
 });
