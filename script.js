@@ -1,5 +1,5 @@
 // Initialize EmailJS
-(function() {
+(function () {
   emailjs.init({
     publicKey: "XMPN1BECultZ3Fyrv",
     blockHeadless: true,
@@ -48,10 +48,11 @@ if (searchInput) {
 // Contact Form Function
 function sendMail(event) {
   event.preventDefault();
-  
+
   const serviceID = 'service_t5qcgjv';
-  const templateID = 'template_f1tvom3';
-  
+  const adminTemplateID = 'template_f1tvom3';         // Message to YOU
+  const userReplyTemplateID = 'template_reply_to_user'; // Reply to USER
+
   const params = {
     name: document.getElementById('name').value.trim(),
     email: document.getElementById('email').value.trim(),
@@ -66,21 +67,25 @@ function sendMail(event) {
     return;
   }
 
-  // Email validation
+  // Email format check
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
     showStatusMessage('Please enter a valid email address', 'error');
     return;
   }
 
-  // Show loading state
   const submitBtn = contactForm.querySelector('button[type="submit"]');
   const originalBtnText = submitBtn.textContent;
   submitBtn.textContent = 'Sending...';
   submitBtn.disabled = true;
 
-  emailjs.send(serviceID, templateID, params)
+  // Step 1: Send to YOU
+  emailjs.send(serviceID, adminTemplateID, params)
     .then(() => {
-      showStatusMessage('✅ Message sent successfully! We will respond soon.', 'success');
+      // Step 2: Send confirmation to USER
+      return emailjs.send(serviceID, userReplyTemplateID, params);
+    })
+    .then(() => {
+      showStatusMessage('✅ Message sent! You’ll get a confirmation email shortly.', 'success');
       contactForm.reset();
       submitBtn.textContent = originalBtnText;
       submitBtn.disabled = false;
@@ -98,14 +103,12 @@ function showStatusMessage(message, type) {
   statusMessage.textContent = message;
   statusMessage.className = type;
   statusMessage.classList.add('show');
-  
-  // Clear message after 5 seconds
   setTimeout(() => {
     statusMessage.classList.remove('show');
   }, 5000);
 }
 
-// Authentication Functions
+// Auth Functions
 function openAuthModal() {
   authModal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
@@ -177,16 +180,16 @@ function searchResources() {
   }
 }
 
-// Initialize on load
-document.addEventListener('DOMContentLoaded', function() {
+// On page load
+document.addEventListener('DOMContentLoaded', function () {
   const user = localStorage.getItem('loggedInUser');
   if (!user && window.location.pathname.includes('contact.html')) {
     openAuthModal();
   }
 
-  // Add click handlers for all category cards
+  // External link confirm
   document.querySelectorAll('.category-card').forEach(card => {
-    card.addEventListener('click', function(e) {
+    card.addEventListener('click', function (e) {
       e.preventDefault();
       if (confirm('🔔 You are leaving Free Finder. Continue to external site?')) {
         window.open(this.href, '_blank');
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Close modal when clicking outside
-window.addEventListener('click', function(event) {
+window.addEventListener('click', function (event) {
   if (event.target === authModal) {
     closeAuthModal();
   }
