@@ -51,7 +51,8 @@ function sendMail(event) {
 
   const serviceID = 'service_t5qcgjv';
   const adminTemplateID = 'template_f1tvom3';         // Message to YOU
-  const userReplyTemplateID = 'template_reply_to_user'; // Reply to USER
+  const userReplyTemplateID = 'template_qawufof'; // Reply to USER
+  
 
   const params = {
     name: document.getElementById('name').value.trim(),
