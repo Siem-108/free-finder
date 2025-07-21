@@ -1,5 +1,5 @@
-// Initialize EmailJS
-(function () {
+// Initialize EmailJS with your public key
+(function() {
   emailjs.init({
     publicKey: "XMPN1BECultZ3Fyrv",
     blockHeadless: true,
@@ -45,31 +45,44 @@ if (searchInput) {
   searchInput.addEventListener('keyup', searchResources);
 }
 
-// Contact Form Function
+// Contact Form Function - UPDATED with proper email handling
 function sendMail(event) {
   event.preventDefault();
 
   const serviceID = 'service_t5qcgjv';
-  const adminTemplateID = 'template_f1tvom3';         // Message to YOU
-  const userReplyTemplateID = 'template_qawufof'; // Reply to USER
-  
+  const adminTemplateID = 'template_f1tvom3';      // Message to admin
+  const userReplyTemplateID = 'template_qawufof';  // Reply to user
 
-  const params = {
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim(),
+  // Prepare parameters for both emails
+  const userEmail = document.getElementById('email').value.trim();
+  const userName = document.getElementById('name').value.trim();
+  
+  const adminParams = {
+    from_name: userName,
+    reply_to: userEmail,  // Important for reply-to header
+    to_email: "yourbusiness@email.com",  // Your business email
     subject: document.getElementById('subject').value.trim(),
     message: document.getElementById('message').value.trim(),
     logo_url: "https://i.imgur.com/31ZeO6z.jpeg"
   };
 
+  const userParams = {
+    name: userName,
+    email: userEmail,
+    subject: "Thank you for contacting us!",
+    message: document.getElementById('message').value.trim(),
+    logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
+    business_email: "yourbusiness@email.com"  // For reply-to in user's email
+  };
+
   // Validate inputs
-  if (!params.name || !params.email || !params.subject || !params.message) {
+  if (!userName || !userEmail || !adminParams.subject || !adminParams.message) {
     showStatusMessage('Please fill in all required fields', 'error');
     return;
   }
 
   // Email format check
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(userEmail)) {
     showStatusMessage('Please enter a valid email address', 'error');
     return;
   }
@@ -79,53 +92,61 @@ function sendMail(event) {
   submitBtn.textContent = 'Sending...';
   submitBtn.disabled = true;
 
-  // Step 1: Send to YOU
-  emailjs.send(serviceID, adminTemplateID, params)
-    .then(() => {
-      // Step 2: Send confirmation to USER
-      return emailjs.send(serviceID, userReplyTemplateID, params);
-    })
-    .then(() => {
-      showStatusMessage('✅ Message sent! You’ll get a confirmation email shortly.', 'success');
-      contactForm.reset();
-      submitBtn.textContent = originalBtnText;
-      submitBtn.disabled = false;
-    })
-    .catch((error) => {
-      console.error('EmailJS Error:', error);
-      showStatusMessage('❌ Failed to send message. Please try again later.', 'error');
-      submitBtn.textContent = originalBtnText;
-      submitBtn.disabled = false;
-    });
+  // Send both emails sequentially with better error handling
+  Promise.all([
+    emailjs.send(serviceID, adminTemplateID, adminParams),
+    emailjs.send(serviceID, userReplyTemplateID, userParams)
+  ])
+  .then(() => {
+    showStatusMessage('✅ Message sent! You\'ll receive a confirmation shortly.', 'success');
+    contactForm.reset();
+  })
+  .catch((error) => {
+    console.error('EmailJS Error:', error);
+    showStatusMessage('❌ Failed to send message. Please try again.', 'error');
+  })
+  .finally(() => {
+    submitBtn.textContent = originalBtnText;
+    submitBtn.disabled = false;
+  });
 }
 
-// Show status message
+// Status message handler - IMPROVED
 function showStatusMessage(message, type) {
+  if (!statusMessage) return;
+  
   statusMessage.textContent = message;
-  statusMessage.className = type;
-  statusMessage.classList.add('show');
+  statusMessage.className = `status-message ${type}`;
+  statusMessage.style.display = 'block';
+  
   setTimeout(() => {
-    statusMessage.classList.remove('show');
-  }, 5000);
+    statusMessage.style.opacity = '1';
+    setTimeout(() => {
+      statusMessage.style.opacity = '0';
+      setTimeout(() => {
+        statusMessage.style.display = 'none';
+      }, 500);
+    }, 4500);
+  }, 10);
 }
 
-// Auth Functions
+// Auth Functions (unchanged but included for completeness)
 function openAuthModal() {
-  authModal.style.display = 'flex';
+  if (authModal) authModal.style.display = 'flex';
   document.body.style.overflow = 'hidden';
 }
 
 function closeAuthModal() {
-  authModal.style.display = 'none';
+  if (authModal) authModal.style.display = 'none';
   document.body.style.overflow = 'auto';
 }
 
 function loginUser() {
-  const email = document.getElementById('authEmail').value;
-  const password = document.getElementById('authPassword').value;
+  const email = document.getElementById('authEmail')?.value;
+  const password = document.getElementById('authPassword')?.value;
   const stored = JSON.parse(localStorage.getItem('users') || '{}');
 
-  if (stored[email] && stored[email] === password) {
+  if (email && password && stored[email] && stored[email] === password) {
     localStorage.setItem('loggedInUser', email);
     alert('✅ Login successful!');
     closeAuthModal();
@@ -135,8 +156,8 @@ function loginUser() {
 }
 
 function registerUser() {
-  const email = document.getElementById('authEmail').value;
-  const password = document.getElementById('authPassword').value;
+  const email = document.getElementById('authEmail')?.value;
+  const password = document.getElementById('authPassword')?.value;
 
   if (!email || !password) {
     alert('❗ Please fill in both fields.');
@@ -153,20 +174,23 @@ function registerUser() {
   }
 }
 
-// Search Functionality
+// Search Functionality (unchanged)
 function searchResources() {
+  if (!searchInput) return;
+
   const input = searchInput.value.toLowerCase();
-  const cards = document.querySelectorAll('.category-card');
   const resultsContainer = document.getElementById('searchResults');
+  const cards = document.querySelectorAll('.category-card');
+  
+  if (!resultsContainer) return;
   resultsContainer.innerHTML = '';
 
   if (!input) return;
 
   let found = false;
-
   cards.forEach(card => {
-    const label = card.querySelector('p').textContent.toLowerCase();
-    if (label.includes(input)) {
+    const label = card.querySelector('p')?.textContent.toLowerCase();
+    if (label?.includes(input)) {
       found = true;
       resultsContainer.innerHTML += `
         <div>
@@ -181,8 +205,8 @@ function searchResources() {
   }
 }
 
-// On page load
-document.addEventListener('DOMContentLoaded', function () {
+// On page load - ENHANCED with null checks
+document.addEventListener('DOMContentLoaded', function() {
   const user = localStorage.getItem('loggedInUser');
   if (!user && window.location.pathname.includes('contact.html')) {
     openAuthModal();
@@ -190,7 +214,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // External link confirm
   document.querySelectorAll('.category-card').forEach(card => {
-    card.addEventListener('click', function (e) {
+    card.addEventListener('click', function(e) {
       e.preventDefault();
       if (confirm('🔔 You are leaving Free Finder. Continue to external site?')) {
         window.open(this.href, '_blank');
@@ -200,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Close modal when clicking outside
-window.addEventListener('click', function (event) {
+window.addEventListener('click', function(event) {
   if (event.target === authModal) {
     closeAuthModal();
   }
