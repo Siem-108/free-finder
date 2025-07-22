@@ -1433,3 +1433,19 @@ section h2::after {
 .category-card.culture {
   border-bottom: none !important;
 }
+/* Add to your styles.css as backup */
+.category-card, .movie-item, .resource-card {
+    opacity: 1 !important;
+    visibility: visible !important;
+    display: block !important;
+    transform: translateZ(0);
+}
+
+main {
+    position: relative;
+    z-index: 1;
+}
+
+body, html {
+    overflow-x: hidden !important;
+}

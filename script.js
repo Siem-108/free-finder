@@ -62,7 +62,7 @@ function sendMail(event) {
 
   const serviceID = 'service_t5qcgjv';
   const adminTemplateID = 'template_f1tvom3';
-  const userReplyTemplateID = 'template_qawufof';
+  //const userReplyTemplateID = 'template_qawufof';//
 
   const params = {
     name: document.getElementById('name').value.trim(),
@@ -1361,3 +1361,120 @@ function setupCardAnimations() {
     observer.observe(card);
   });
 }
+// Free Finder Visibility Fix for GitHub Pages
+document.addEventListener('DOMContentLoaded', function() {
+    // ======================
+    // VISIBILITY FIXES
+    // ======================
+    function fixVisibilityIssues() {
+        // 1. Ensure all cards are visible
+        const cards = document.querySelectorAll('.category-card, .movie-item, .resource-card');
+        cards.forEach(card => {
+            card.style.opacity = '1';
+            card.style.visibility = 'visible';
+            card.style.display = 'block';
+        });
+
+        // 2. Fix z-index stacking issues
+        const mainContent = document.querySelector('main');
+        if (mainContent) {
+            mainContent.style.position = 'relative';
+            mainContent.style.zIndex = '1';
+        }
+
+        // 3. Reset any problematic inherited styles
+        document.body.style.overflowX = 'hidden';
+        document.documentElement.style.overflowX = 'hidden';
+        
+        // 4. Force redraw for transition elements
+        const forceRedraw = (element) => {
+            if (!element) return;
+            element.style.display = 'none';
+            element.offsetHeight; // Trigger reflow
+            element.style.display = '';
+        };
+
+        cards.forEach(forceRedraw);
+    }
+
+    // ======================
+    // ENHANCED CARD VISIBILITY
+    // ======================
+    function enhanceCardVisibility() {
+        const cards = document.querySelectorAll('.category-card, .movie-item');
+        cards.forEach(card => {
+            // Ensure hover states work
+            card.style.transition = 'all 0.3s ease';
+            card.style.transform = 'translateZ(0)'; // Hardware accelerate
+            
+            // Add visible border
+            card.style.border = '1px solid rgba(0,0,0,0.1)';
+            card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
+            
+            // Make sure content is visible
+            const cardContent = card.querySelector('.card-content');
+            if (cardContent) {
+                cardContent.style.opacity = '1';
+                cardContent.style.visibility = 'visible';
+            }
+        });
+    }
+
+    // ======================
+    // FIX EXTERNAL LINK DISPLAY
+    // ======================
+    function fixExternalLinkDisplay() {
+        const links = document.querySelectorAll('a[href^="http"]');
+        links.forEach(link => {
+            link.style.display = 'inline-block';
+            link.style.visibility = 'visible';
+            link.style.opacity = '1';
+            
+            // Add visual indicator for external links
+            if (!link.href.includes(window.location.hostname)) {
+                link.innerHTML += ' <i class="fas fa-external-link-alt"></i>';
+            }
+        });
+    }
+
+    // ======================
+    // MAIN INITIALIZATION
+    // ======================
+    function initialize() {
+        // Run visibility fixes
+        fixVisibilityIssues();
+        enhanceCardVisibility();
+        fixExternalLinkDisplay();
+
+        // Set timeout as fallback
+        setTimeout(() => {
+            fixVisibilityIssues();
+        }, 1000);
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', fixVisibilityIssues);
+    }
+
+    // Start the fixes
+    initialize();
+
+    // ======================
+    // ORIGINAL FUNCTIONALITY
+    // ======================
+    // [Include all your original code here - authentication, contact form, etc.]
+    // Make sure to merge this with your existing functionality
+    
+    // Initialize EmailJS
+    if (typeof emailjs !== 'undefined') {
+        emailjs.init({
+            publicKey: "XMPN1BECultZ3Fyrv",
+            blockHeadless: true,
+            limitRate: {
+                id: 'app',
+                throttle: 10000
+            }
+        });
+    }
+
+    // [Rest of your original code...]
+});
