@@ -1,3 +1,46 @@
+// Fixed Navigation System
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all navigation elements
+  const navItems = document.querySelectorAll('.nav-item');
+  const activeClass = 'nav-active';
+  
+  // Set initial active item based on current page
+  function setActiveNav() {
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    navItems.forEach(item => {
+      const itemPage = item.getAttribute('data-page');
+      if (itemPage === currentPage) {
+        item.classList.add(activeClass);
+      } else {
+        item.classList.remove(activeClass);
+      }
+    });
+  }
+
+  // Make navigation sticky/fixed
+  function fixNavigation() {
+    const nav = document.querySelector('.main-nav');
+    if (nav) {
+      nav.style.position = 'fixed';
+      nav.style.top = '0';
+      nav.style.width = '100%';
+      nav.style.zIndex = '1000';
+      nav.style.background = '#fff';
+      nav.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+      
+      // Add padding to body to compensate for fixed nav
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
+    }
+  }
+
+  // Initialize
+  setActiveNav();
+  fixNavigation();
+
+  // Update on resize
+  window.addEventListener('resize', fixNavigation);
+});
 // Initialize EmailJS with enhanced security
 (function () {
   emailjs.init({
@@ -10,949 +53,20 @@
   });
 })();
 
-// DOM Elements
-const contactForm = document.getElementById('contactForm');
-const statusMessage = document.getElementById('statusMessage');
-const authButton = document.getElementById('authButton');
-const loginBtn = document.getElementById('loginBtn');
-const registerBtn = document.getElementById('registerBtn');
-const closeModalBtn = document.getElementById('closeModalBtn');
-const authModal = document.getElementById('authModal');
-const searchInput = document.getElementById('searchInput');
-const logoutBtn = document.getElementById('logoutBtn');
-const userGreeting = document.getElementById('userGreeting');
+
+
 
 // Click counter for protected actions
 let protectedClickCount = 0;
-const MAX_CLICKS_BEFORE_REMINDER = 5;
+let sessionTimer = null;
 
-// Event Listeners
+// Initialize the application
 document.addEventListener('DOMContentLoaded', initializeApp);
 
 function initializeApp() {
-  if (contactForm) contactForm.addEventListener('submit', sendMail);
-  if (authButton) authButton.addEventListener('click', openAuthModal);
-  if (loginBtn) loginBtn.addEventListener('click', handleLogin);
-  if (registerBtn) registerBtn.addEventListener('click', handleRegister);
-  if (closeModalBtn) closeModalBtn.addEventListener('click', closeAuthModal);
-  if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-  if (searchInput) searchInput.addEventListener('keyup', searchResources);
-
-  // Track protected clicks
-  document.addEventListener('click', function(e) {
-    const protectedElement = e.target.closest('.protected-action');
-    if (protectedElement && !localStorage.getItem('loggedInUser')) {
-      protectedClickCount++;
-      if (protectedClickCount >= MAX_CLICKS_BEFORE_REMINDER) {
-        showReminderToast();
-        protectedClickCount = 0;
-      }
-    }
-  });
-
-  // Initialize UI and check auth status
-  updateAuthUI();
-  setupExternalLinks();
-  setupCardAnimations();
-}
-
-// Contact Form Function
-function sendMail(event) {
-  event.preventDefault();
-
-  const serviceID = 'service_t5qcgjv';
-  const adminTemplateID = 'template_f1tvom3';
-  //const userReplyTemplateID = 'template_qawufof';//
-
-  const params = {
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    subject: document.getElementById('subject').value.trim(),
-    message: document.getElementById('message').value.trim(),
-    logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    reply_to: document.getElementById('email').value.trim(),
-    date: new Date().toLocaleString()
-  };
-
-  // Enhanced validation
-  if (!validateContactForm(params)) return;
-
-  const submitBtn = contactForm.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.textContent;
-  submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
-  submitBtn.disabled = true;
-
-  // Send emails
-  sendAdminEmail(params)
-    .then(() => sendUserConfirmation(params))
-    .then(() => handleSendSuccess(submitBtn, originalBtnText))
-    .catch(error => handleSendError(error, submitBtn, originalBtnText));
-}
-
-function validateContactForm(params) {
-  if (!params.name || !params.email || !params.subject || !params.message) {
-    showStatusMessage('Please fill in all required fields', 'error');
-    return false;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
-    showStatusMessage('Please enter a valid email address', 'error');
-    return false;
-  }
-
-  if (params.message.length < 10) {
-    showStatusMessage('Message should be at least 10 characters', 'error');
-    return false;
-  }
-
-  return true;
-}
-
-async function sendAdminEmail(params) {
-  return emailjs.send('service_t5qcgjv', 'template_f1tvom3', params);
-}
-
-async function sendUserConfirmation(params) {
-  return emailjs.send('service_t5qcgjv', 'template_qawufof', params);
-}
-
-function handleSendSuccess(submitBtn, originalBtnText) {
-  showStatusMessage('✅ Message sent! You\'ll get a confirmation email shortly.', 'success');
-  contactForm.reset();
-  submitBtn.textContent = originalBtnText;
-  submitBtn.disabled = false;
-  
-  // Track successful submission
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'contact_form_submission', {
-      'event_category': 'engagement',
-      'event_label': 'Successful Contact Form Submission'
-    });
-  }
-}
-
-function handleSendError(error, submitBtn, originalBtnText) {
-  console.error('EmailJS Error:', error);
-  showStatusMessage('❌ Failed to send message. Please try again later.', 'error');
-  submitBtn.textContent = originalBtnText;
-  submitBtn.disabled = false;
-  
-  // Track failed submission
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'contact_form_error', {
-      'event_category': 'engagement',
-      'event_label': 'Failed Contact Form Submission'
-    });
-  }
-}
-
-// Auth Functions
-function openAuthModal() {
-  authModal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  document.getElementById('authEmail').focus();
-  document.getElementById('authForm').reset();
-  document.getElementById('authError').textContent = '';
-}
-
-function closeAuthModal() {
-  authModal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
-
-function handleLogin() {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const authError = document.getElementById('authError');
-  
-  if (!validateAuthInput(email, password, authError)) return;
-
-  const stored = JSON.parse(localStorage.getItem('users') || '{}');
-  const demoAccounts = {
-    'admin@freefinder.com': 'admin123',
-    ...stored
-  };
-
-  if (demoAccounts[email] && demoAccounts[email] === password) {
-    handleSuccessfulLogin(email);
-  } else {
-    authError.textContent = 'Invalid email or password';
-  }
-}
-
-function handleRegister() {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const passwordConfirm = document.getElementById('authPasswordConfirm').value;
-  const name = document.getElementById('authName').value.trim();
-  const authError = document.getElementById('authError');
-
-  if (!validateRegistration(email, password, passwordConfirm, authError)) return;
-
-  let users = JSON.parse(localStorage.getItem('users') || '{}');
-  if (users[email]) {
-    authError.textContent = 'Email already registered';
-    return;
-  }
-
-  users[email] = {
-    password: password,
-    name: name || email.split('@')[0],
-    registered: new Date().toISOString()
-  };
-
-  localStorage.setItem('users', JSON.stringify(users));
-  handleSuccessfulLogin(email, name);
-}
-
-function validateAuthInput(email, password, errorElement) {
-  if (!email || !password) {
-    errorElement.textContent = 'Please fill in both fields';
-    return false;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errorElement.textContent = 'Please enter a valid email address';
-    return false;
-  }
-
-  return true;
-}
-
-function validateRegistration(email, password, passwordConfirm, errorElement) {
-  if (!validateAuthInput(email, password, errorElement)) return false;
-
-  if (password.length < 6) {
-    errorElement.textContent = 'Password must be at least 6 characters';
-    return false;
-  }
-
-  if (password !== passwordConfirm) {
-    errorElement.textContent = 'Passwords do not match';
-    return false;
-  }
-
-  return true;
-}
-
-function handleSuccessfulLogin(email, name = '') {
-  localStorage.setItem('loggedInUser', JSON.stringify({
-    email: email,
-    name: name || email.split('@')[0]
-  }));
-  
-  updateAuthUI();
-  showToast('✅ Login successful!', 'success');
-  closeAuthModal();
-  
-  if (window.location.pathname.includes('contact.html')) {
-    window.location.reload();
-  }
-}
-
-function handleLogout() {
-  localStorage.removeItem('loggedInUser');
-  updateAuthUI();
-  showToast('👋 You have been logged out', 'info');
-  
-  if (window.location.pathname.includes('contact.html')) {
-    setTimeout(openAuthModal, 1000);
-  }
-}
-
-function updateAuthUI() {
-  const user = JSON.parse(localStorage.getItem('loggedInUser') || null);
-  
-  if (user) {
-    if (authButton) authButton.style.display = 'none';
-    if (logoutBtn) logoutBtn.style.display = 'block';
-    if (userGreeting) {
-      userGreeting.textContent = `Welcome, ${user.name || user.email.split('@')[0]}`;
-      userGreeting.style.display = 'block';
-    }
-  } else {
-    if (authButton) authButton.style.display = 'block';
-    if (logoutBtn) logoutBtn.style.display = 'none';
-    if (userGreeting) userGreeting.style.display = 'none';
-  }
-}
-
-// Reminder System
-function showReminderToast() {
-  const toast = document.createElement('div');
-  toast.className = 'reminder-toast';
-  toast.innerHTML = `
-    <p>Want full access? <button id="reminderLoginBtn">Login</button> or continue as guest</p>
-    <button class="toast-close">&times;</button>
-  `;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => toast.classList.add('show'), 10);
-  
-  toast.querySelector('.toast-close').addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-  
-  document.getElementById('reminderLoginBtn').addEventListener('click', () => {
-    openAuthModal();
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 8000);
-}
-
-// Search Functionality
-function searchResources() {
-  const input = searchInput.value.toLowerCase().trim();
-  const cards = document.querySelectorAll('.category-card');
-  const resultsContainer = document.getElementById('searchResults');
-  resultsContainer.innerHTML = '';
-
-  if (!input || input.length < 2) {
-    resultsContainer.style.display = 'none';
-    return;
-  }
-
-  let found = false;
-  resultsContainer.style.display = 'block';
-
-  cards.forEach(card => {
-    const label = card.querySelector('p').textContent.toLowerCase();
-    const description = card.dataset.description ? card.dataset.description.toLowerCase() : '';
-    
-    if (label.includes(input) || description.includes(input)) {
-      found = true;
-      const clone = card.cloneNode(true);
-      clone.classList.add('search-result-item');
-      resultsContainer.appendChild(clone);
-    }
-  });
-
-  if (!found) {
-    resultsContainer.innerHTML = `
-      <div class="no-results">
-        <i class="fas fa-search"></i>
-        <p>No results found for "${input}"</p>
-        <p class="suggestions">Try different keywords</p>
-      </div>
-    `;
-  }
-}
-
-// Helper Functions
-function showStatusMessage(message, type) {
-  statusMessage.textContent = message;
-  statusMessage.className = type;
-  statusMessage.style.display = 'block';
-  statusMessage.style.opacity = 1;
-  
-  setTimeout(() => {
-    statusMessage.style.opacity = 0;
-    setTimeout(() => {
-      statusMessage.style.display = 'none';
-    }, 300);
-  }, 5000);
-}
-
-function showToast(message, type) {
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => {
-        toast.remove();
-      }, 300);
-    }, 3000);
-  }, 100);
-}
-
-function setupExternalLinks() {
-  document.querySelectorAll('.category-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-      if (!this.href) return;
-      
-      e.preventDefault();
-      
-      const modal = document.createElement('div');
-      modal.className = 'external-link-modal';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <h3>Leaving Free Finder</h3>
-          <p>You are about to visit:</p>
-          <p class="link-preview">${this.href.replace(/^https?:\/\//, '')}</p>
-          <div class="modal-buttons">
-            <button class="cancel-btn">Cancel</button>
-            <button class="confirm-btn">Continue</button>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      modal.querySelector('.cancel-btn').addEventListener('click', () => modal.remove());
-      modal.querySelector('.confirm-btn').addEventListener('click', () => {
-        window.open(this.href, '_blank');
-        modal.remove();
-      });
-    });
-  });
-}
-
-function setupCardAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-in');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.category-card').forEach(card => {
-    observer.observe(card);
-  });
-}
-// Initialize EmailJS with enhanced security
-(function () {
-  emailjs.init({
-    publicKey: "XMPN1BECultZ3Fyrv",
-    blockHeadless: true,
-    limitRate: {
-      id: 'app',
-      throttle: 10000
-    }
-  });
-})();
-
-
-// Initialize application
-document.addEventListener('DOMContentLoaded', function() {
-  initializeEventListeners();
-  updateAuthUI();
-  setupExternalLinks();
-  setupCardAnimations();
-  
-  // Check if contact page requires auth
-  if (window.location.pathname.includes('contact.html')) {
-    checkAuthStatus();
-  }
-});
-
-function initializeEventListeners() {
-  // Form submissions
-  if (contactForm) contactForm.addEventListener('submit', sendMail);
-  if (authModal) {
-    const authForm = document.getElementById('authForm');
-    if (authForm) authForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      if (loginBtn.style.display !== 'none') {
-        handleLogin();
-      } else {
-        handleRegister();
-      }
-    });
-  }
-
-  // Auth buttons
-  if (authButton) authButton.addEventListener('click', openAuthModal);
-  if (loginBtn) loginBtn.addEventListener('click', handleLogin);
-  if (registerBtn) registerBtn.addEventListener('click', showRegistrationForm);
-  if (registerSubmitBtn) registerSubmitBtn.addEventListener('click', handleRegister);
-  if (closeModalBtn) closeModalBtn.addEventListener('click', closeAuthModal);
-  if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-  if (authToggle) authToggle.addEventListener('click', toggleAuthMode);
-
-  // Search functionality
-  if (searchInput) searchInput.addEventListener('keyup', searchResources);
-
-  // Track protected clicks
-  document.addEventListener('click', function(e) {
-    const protectedElement = e.target.closest('.protected-action');
-    if (protectedElement && !localStorage.getItem('loggedInUser')) {
-      protectedClickCount++;
-      if (protectedClickCount >= MAX_CLICKS_BEFORE_REMINDER) {
-        showReminderToast();
-        protectedClickCount = 0;
-      }
-    }
-  });
-}
-
-// Contact Form Functions
-function sendMail(event) {
-  event.preventDefault();
-
-  const serviceID = 'service_t5qcgjv';
-  const adminTemplateID = 'template_f1tvom3';
-  const userReplyTemplateID = 'template_qawufof';
-
-  const params = {
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    subject: document.getElementById('subject').value.trim(),
-    message: document.getElementById('message').value.trim(),
-    logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    reply_to: document.getElementById('email').value.trim(),
-    date: new Date().toLocaleString()
-  };
-
-  if (!validateContactForm(params)) return;
-
-  const submitBtn = contactForm.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.textContent;
-  submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
-  submitBtn.disabled = true;
-
-  emailjs.send(serviceID, adminTemplateID, params)
-    .then(() => emailjs.send(serviceID, userReplyTemplateID, params))
-    .then(() => handleSendSuccess(submitBtn, originalBtnText))
-    .catch(error => handleSendError(error, submitBtn, originalBtnText));
-}
-
-function validateContactForm(params) {
-  if (!params.name || !params.email || !params.subject || !params.message) {
-    showStatusMessage('Please fill in all required fields', 'error');
-    return false;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
-    showStatusMessage('Please enter a valid email address', 'error');
-    return false;
-  }
-
-  if (params.message.length < 10) {
-    showStatusMessage('Message should be at least 10 characters', 'error');
-    return false;
-  }
-
-  return true;
-}
-
-function handleSendSuccess(submitBtn, originalBtnText) {
-  showStatusMessage('✅ Message sent! You\'ll get a confirmation email shortly.', 'success');
-  contactForm.reset();
-  submitBtn.textContent = originalBtnText;
-  submitBtn.disabled = false;
-  
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'contact_form_submission', {
-      'event_category': 'engagement',
-      'event_label': 'Successful Contact Form Submission'
-    });
-  }
-}
-
-function handleSendError(error, submitBtn, originalBtnText) {
-  console.error('EmailJS Error:', error);
-  showStatusMessage('❌ Failed to send message. Please try again later.', 'error');
-  submitBtn.textContent = originalBtnText;
-  submitBtn.disabled = false;
-  
-  if (typeof gtag !== 'undefined') {
-    gtag('event', 'contact_form_error', {
-      'event_category': 'engagement',
-      'event_label': 'Failed Contact Form Submission'
-    });
-  }
-}
-
-// Auth Functions
-function openAuthModal() {
-  authModal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-  document.getElementById('authEmail').focus();
-  document.getElementById('authForm').reset();
-  document.getElementById('authError').textContent = '';
-}
-
-function closeAuthModal() {
-  authModal.style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
-
-function showRegistrationForm() {
-  openAuthModal();
-  toggleAuthMode(true);
-}
-
-function toggleAuthMode(showRegister = false) {
-  if (showRegister || loginBtn.style.display === 'none') {
-    // Show login form
-    loginBtn.style.display = 'block';
-    registerSubmitBtn.style.display = 'none';
-    authToggle.textContent = 'Need an account? Register';
-    authTitle.textContent = 'Login to Your Account';
-    passwordConfirmGroup.style.display = 'none';
-    nameGroup.style.display = 'none';
-  } else {
-    // Show registration form
-    loginBtn.style.display = 'none';
-    registerSubmitBtn.style.display = 'block';
-    authToggle.textContent = 'Already have an account? Login';
-    authTitle.textContent = 'Create New Account';
-    passwordConfirmGroup.style.display = 'block';
-    nameGroup.style.display = 'block';
-  }
-  
-  document.getElementById('authError').textContent = '';
-}
-
-function handleLogin() {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const authError = document.getElementById('authError');
-  
-  if (!validateAuthInput(email, password, authError)) return;
-
-  const stored = JSON.parse(localStorage.getItem('users') || '{}');
-  const demoAccounts = {
-    'admin@freefinder.com': { password: 'admin123', name: 'Admin' },
-    ...stored
-  };
-
-  if (demoAccounts[email] && demoAccounts[email].password === password) {
-    handleSuccessfulAuth(email, demoAccounts[email].name);
-  } else {
-    authError.textContent = 'Invalid email or password';
-  }
-}
-
-function handleRegister() {
-  const email = document.getElementById('authEmail').value.trim();
-  const password = document.getElementById('authPassword').value;
-  const passwordConfirm = document.getElementById('authPasswordConfirm').value;
-  const name = document.getElementById('authName').value.trim();
-  const authError = document.getElementById('authError');
-
-  if (!validateRegistration(email, password, passwordConfirm, authError)) return;
-
-  let users = JSON.parse(localStorage.getItem('users') || '{}');
-  if (users[email]) {
-    authError.textContent = 'Email already registered';
-    return;
-  }
-
-  users[email] = {
-    password: password,
-    name: name || email.split('@')[0],
-    registered: new Date().toISOString()
-  };
-
-  localStorage.setItem('users', JSON.stringify(users));
-  handleSuccessfulAuth(email, name);
-}
-
-function validateAuthInput(email, password, errorElement) {
-  if (!email || !password) {
-    errorElement.textContent = 'Please fill in both fields';
-    return false;
-  }
-
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errorElement.textContent = 'Please enter a valid email address';
-    return false;
-  }
-
-  return true;
-}
-
-function validateRegistration(email, password, passwordConfirm, errorElement) {
-  if (!validateAuthInput(email, password, errorElement)) return false;
-
-  if (password.length < 6) {
-    errorElement.textContent = 'Password must be at least 6 characters';
-    return false;
-  }
-
-  if (password !== passwordConfirm) {
-    errorElement.textContent = 'Passwords do not match';
-    return false;
-  }
-
-  return true;
-}
-
-function handleSuccessfulAuth(email, name = '') {
-  localStorage.setItem('loggedInUser', JSON.stringify({
-    email: email,
-    name: name || email.split('@')[0]
-  }));
-  
-  updateAuthUI();
-  showToast('✅ Login successful!', 'success');
-  closeAuthModal();
-  
-  if (window.location.pathname.includes('contact.html')) {
-    window.location.reload();
-  }
-}
-
-function handleLogout() {
-  localStorage.removeItem('loggedInUser');
-  updateAuthUI();
-  showToast('👋 You have been logged out', 'info');
-  
-  if (window.location.pathname.includes('contact.html')) {
-    setTimeout(openAuthModal, 1000);
-  }
-}
-
-function checkAuthStatus() {
-  if (!localStorage.getItem('loggedInUser')) {
-    openAuthModal();
-    const mainContent = document.querySelector('main');
-    if (mainContent) {
-      mainContent.innerHTML = `
-        <div class="auth-required">
-          <h2>Please Login</h2>
-          <p>You need to login to access this page</p>
-        </div>
-      `;
-    }
-  }
-}
-
-function updateAuthUI() {
-  const user = JSON.parse(localStorage.getItem('loggedInUser') || null);
-  
-  if (user) {
-    if (authButton) authButton.style.display = 'none';
-    if (registerBtn) registerBtn.style.display = 'none';
-    if (logoutBtn) logoutBtn.style.display = 'block';
-    if (userGreeting) {
-      userGreeting.textContent = `Welcome, ${user.name || user.email.split('@')[0]}`;
-      userGreeting.style.display = 'block';
-    }
-  } else {
-    if (authButton) authButton.style.display = 'block';
-    if (registerBtn) registerBtn.style.display = 'block';
-    if (logoutBtn) logoutBtn.style.display = 'none';
-    if (userGreeting) userGreeting.style.display = 'none';
-  }
-}
-
-// Reminder System
-function showReminderToast() {
-  const toast = document.createElement('div');
-  toast.className = 'reminder-toast';
-  toast.innerHTML = `
-    <p>Want full access? <button id="reminderLoginBtn">Login/Register</button> or continue as guest</p>
-    <button class="toast-close">&times;</button>
-  `;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => toast.classList.add('show'), 10);
-  
-  toast.querySelector('.toast-close').addEventListener('click', () => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-  
-  document.getElementById('reminderLoginBtn').addEventListener('click', () => {
-    openAuthModal();
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  });
-  
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 300);
-  }, 8000);
-}
-
-// Search Functionality
-function searchResources() {
-  const input = searchInput.value.toLowerCase().trim();
-  const cards = document.querySelectorAll('.category-card');
-  const resultsContainer = document.getElementById('searchResults');
-  resultsContainer.innerHTML = '';
-
-  if (!input || input.length < 2) {
-    resultsContainer.style.display = 'none';
-    return;
-  }
-
-  let found = false;
-  resultsContainer.style.display = 'block';
-
-  cards.forEach(card => {
-    const label = card.querySelector('p').textContent.toLowerCase();
-    const description = card.dataset.description ? card.dataset.description.toLowerCase() : '';
-    
-    if (label.includes(input) || description.includes(input)) {
-      found = true;
-      const clone = card.cloneNode(true);
-      clone.classList.add('search-result-item');
-      resultsContainer.appendChild(clone);
-    }
-  });
-
-  if (!found) {
-    resultsContainer.innerHTML = `
-      <div class="no-results">
-        <i class="fas fa-search"></i>
-        <p>No results found for "${input}"</p>
-        <p class="suggestions">Try different keywords</p>
-      </div>
-    `;
-  }
-}
-
-// UI Helper Functions
-function showStatusMessage(message, type) {
-  statusMessage.textContent = message;
-  statusMessage.className = type;
-  statusMessage.style.display = 'block';
-  statusMessage.style.opacity = 1;
-  
-  setTimeout(() => {
-    statusMessage.style.opacity = 0;
-    setTimeout(() => {
-      statusMessage.style.display = 'none';
-    }, 300);
-  }, 5000);
-}
-
-function showToast(message, type) {
-  const toast = document.createElement('div');
-  toast.className = `toast toast-${type}`;
-  toast.textContent = message;
-  document.body.appendChild(toast);
-  
-  setTimeout(() => {
-    toast.classList.add('show');
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => {
-        toast.remove();
-      }, 300);
-    }, 3000);
-  }, 100);
-}
-
-function setupExternalLinks() {
-  document.querySelectorAll('.category-card').forEach(card => {
-    card.addEventListener('click', function(e) {
-      if (!this.href) return;
-      
-      e.preventDefault();
-      
-      const modal = document.createElement('div');
-      modal.className = 'external-link-modal';
-      modal.innerHTML = `
-        <div class="modal-content">
-          <h3>Leaving Free Finder</h3>
-          <p>You are about to visit:</p>
-          <p class="link-preview">${this.href.replace(/^https?:\/\//, '')}</p>
-          <div class="modal-buttons">
-            <button class="cancel-btn">Cancel</button>
-            <button class="confirm-btn">Continue</button>
-          </div>
-        </div>
-      `;
-      
-      document.body.appendChild(modal);
-      
-      modal.querySelector('.cancel-btn').addEventListener('click', () => modal.remove());
-      modal.querySelector('.confirm-btn').addEventListener('click', () => {
-        window.open(this.href, '_blank');
-        modal.remove();
-      });
-    });
-  });
-}
-
-function setupCardAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('animate-in');
-      }
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.category-card').forEach(card => {
-    observer.observe(card);
-  });
-}
-/**
- * Free Finder Authentication System
- * Professional implementation with login, registration, and logout functionality
- * Includes form validation, error handling, and UI updates
- */
-
-// Initialize EmailJS with enhanced security
-(function () {
-  emailjs.init({
-    publicKey: "XMPN1BECultZ3Fyrv",
-    blockHeadless: true,
-    limitRate: {
-      id: 'app',
-      throttle: 10000
-    }
-  });
-})();
-
-// Configuration Constants
-const CONFIG = {
-  demoAccounts: {
-    'admin@freefinder.com': {
-      password: 'admin123',
-      name: 'Admin',
-      role: 'admin'
-    },
-    'user@freefinder.com': {
-      password: 'user123',
-      name: 'Demo User',
-      role: 'user'
-    }
-  },
-  maxClicksBeforeReminder: 5,
-  minPasswordLength: 6,
-  sessionTimeout: 30 // minutes
-};
-
-// DOM Elements
-const elements = {
-  contactForm: document.getElementById('contactForm'),
-  statusMessage: document.getElementById('statusMessage'),
-  authButton: document.getElementById('authButton'),
-  loginBtn: document.getElementById('loginBtn'),
-  registerBtn: document.getElementById('registerBtn'),
-  registerSubmitBtn: document.getElementById('registerSubmitBtn'),
-  closeModalBtn: document.getElementById('closeModalBtn'),
-  authModal: document.getElementById('authModal'),
-  searchInput: document.getElementById('searchInput'),
-  logoutBtn: document.getElementById('logoutBtn'),
-  userGreeting: document.getElementById('userGreeting'),
-  authForm: document.getElementById('authForm'),
-  authEmail: document.getElementById('authEmail'),
-  authPassword: document.getElementById('authPassword'),
-  authPasswordConfirm: document.getElementById('authPasswordConfirm'),
-  authName: document.getElementById('authName'),
-  authError: document.getElementById('authError'),
-  authTitle: document.getElementById('authTitle'),
-  authToggle: document.getElementById('authToggle'),
-  passwordConfirmGroup: document.getElementById('passwordConfirmGroup'),
-  nameGroup: document.getElementById('nameGroup')
-};
-
-
-
-// Event Listeners
-function initializeApp() {
   // Form submissions
   if (elements.contactForm) {
-    elements.contactForm.addEventListener('submit', sendMail);
+    elements.contactForm.addEventListener('submit', handleFormSubmit);
   }
 
   // Auth modal
@@ -1148,83 +262,6 @@ function openAuthModal() {
   elements.authError.textContent = '';
   toggleAuthMode(false); // Default to login mode
 }
-// ===== 3-CLICK LOGIN TRIGGER (SKIPS WHEN LOGGED IN) =====
-document.addEventListener('DOMContentLoaded', function() {
-  // Configuration
-  const CLICKS_REQUIRED = 3;
-  const STORAGE_KEY = 'navClickCount';
-  let clickCount = parseInt(localStorage.getItem(STORAGE_KEY)) || 0;
-  let isModalOpen = false;
-
-  // Get elements
-  const navLinks = document.querySelectorAll('.header-right a');
-  const authModal = document.getElementById('authModal');
-  const closeModalBtn = document.getElementById('closeModalBtn');
-
-  // Don't run if user is logged in
-  if (localStorage.getItem('loggedInUser')) {
-    return;
-  }
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      // Skip if logged in or modal is open
-      if (localStorage.getItem('loggedInUser') || isModalOpen) {
-        return;
-      }
-
-      clickCount++;
-      localStorage.setItem(STORAGE_KEY, clickCount.toString());
-
-      if (clickCount >= CLICKS_REQUIRED) {
-        openAuthModal();
-        clickCount = 0;
-        localStorage.setItem(STORAGE_KEY, '0');
-        e.preventDefault();
-      }
-    });
-  });
-
-  function openAuthModal() {
-    if (!authModal) return;
-    
-    authModal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    isModalOpen = true;
-    
-    const emailField = document.getElementById('authEmail');
-    if (emailField) emailField.focus();
-
-    if (closeModalBtn) {
-      closeModalBtn.onclick = closeAuthModal;
-    }
-    
-    authModal.addEventListener('click', function(e) {
-      if (e.target === authModal) {
-        closeAuthModal();
-      }
-    });
-  }
-
-  function closeAuthModal() {
-    authModal.style.display = 'none';
-    document.body.style.overflow = '';
-    isModalOpen = false;
-  }
-
-  // Monitor login state changes
-  const originalHandleLogin = window.handleLogin;
-  window.handleLogin = function(email, name) {
-    originalHandleLogin(email, name);
-    localStorage.setItem(STORAGE_KEY, '0'); // Reset counter
-  };
-
-  const originalHandleRegister = window.handleRegister;
-  window.handleRegister = function(email, name) {
-    originalHandleRegister(email, name);
-    localStorage.setItem(STORAGE_KEY, '0'); // Reset counter
-  };
-});
 
 function closeAuthModal() {
   elements.authModal.style.display = 'none';
@@ -1324,71 +361,113 @@ function showToast(message, type) {
 function showStatusMessage(message, type) {
   if (!elements.statusMessage) return;
   
-  elements.statusMessage.textContent = message;
+  elements.statusMessage.innerHTML = message;
   elements.statusMessage.className = type;
   elements.statusMessage.style.display = 'block';
   
-  setTimeout(() => {
-    elements.statusMessage.style.display = 'none';
-  }, 5000);
+  // Auto-hide after 5 seconds (except for errors)
+  if (type !== 'error') {
+    setTimeout(() => {
+      elements.statusMessage.style.display = 'none';
+    }, 5000);
+  }
 }
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', initializeApp);
-
-// Contact Form Functions (kept from original)
-function sendMail(event) {
+// Contact Form Functions
+async function handleFormSubmit(event) {
   event.preventDefault();
-
-  const params = {
-    name: document.getElementById('name').value.trim(),
-    email: document.getElementById('email').value.trim(),
-    subject: document.getElementById('subject').value.trim(),
-    message: document.getElementById('message').value.trim(),
+  
+  const form = event.target;
+  const formData = {
+    name: form.querySelector('#name').value.trim(),
+    email: form.querySelector('#email').value.trim(),
+    subject: form.querySelector('#subject').value.trim(),
+    message: form.querySelector('#message').value.trim(),
     logo_url: "https://i.imgur.com/31ZeO6z.jpeg",
-    reply_to: document.getElementById('email').value.trim(),
-    date: new Date().toLocaleString()
+    reply_to: form.querySelector('#email').value.trim(),
+    date: new Date().toLocaleString(),
+    user_agent: navigator.userAgent,
+    page_url: window.location.href
   };
 
-  if (!validateContactForm(params)) return;
+  if (!validateContactForm(formData)) return;
 
-  const submitBtn = elements.contactForm.querySelector('button[type="submit"]');
-  const originalBtnText = submitBtn.textContent;
-  submitBtn.innerHTML = '<span class="spinner"></span> Sending...';
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const originalBtnState = {
+    text: submitBtn.textContent,
+    html: submitBtn.innerHTML
+  };
+
+  submitBtn.innerHTML = `
+    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Sending...
+  `;
   submitBtn.disabled = true;
 
-  emailjs.send('service_t5qcgjv', 'template_f1tvom3', params)
-    .then(() => emailjs.send('service_t5qcgjv', 'template_qawufof', params))
-    .then(() => {
-      showStatusMessage('✅ Message sent! You\'ll get a confirmation email shortly.', 'success');
-      elements.contactForm.reset();
-      submitBtn.textContent = originalBtnText;
-      submitBtn.disabled = false;
-    })
-    .catch(error => {
-      console.error('EmailJS Error:', error);
-      showStatusMessage('❌ Failed to send message. Please try again later.', 'error');
-      submitBtn.textContent = originalBtnText;
-      submitBtn.disabled = false;
-    });
+  const emailTimeout = setTimeout(() => {
+    showStatusMessage('The server is taking longer than expected. Please wait...', 'warning');
+  }, 5000);
+
+  try {
+    await emailjs.send('service_t5qcgjv', 'template_f1tvom3', formData);
+    await emailjs.send('service_t5qcgjv', 'template_qawufof', formData);
+    
+    clearTimeout(emailTimeout);
+    showStatusMessage('✅ Message sent! Check your email for confirmation.', 'success');
+    form.reset();
+    
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'contact_form_submission', {
+        'event_category': 'engagement',
+        'event_label': 'Successful Contact Form Submission'
+      });
+    }
+  } catch (error) {
+    clearTimeout(emailTimeout);
+    
+    let errorMessage = '❌ Failed to send message. Please try again later.';
+    if (error.status === 400) {
+      errorMessage = '❌ Invalid form data. Please check your inputs.';
+    } else if (error.status === 429) {
+      errorMessage = '❌ Too many attempts. Please wait before trying again.';
+    }
+    
+    showStatusMessage(errorMessage, 'error');
+    
+    if (typeof gtag !== 'undefined') {
+      gtag('event', 'contact_form_error', {
+        'event_category': 'engagement',
+        'event_label': `Failed Submission: ${error.status || 'Unknown Error'}`
+      });
+    }
+  } finally {
+    submitBtn.textContent = originalBtnState.text;
+    submitBtn.innerHTML = originalBtnState.html;
+    submitBtn.disabled = false;
+  }
 }
 
-function validateContactForm(params) {
-  if (!params.name || !params.email || !params.subject || !params.message) {
-    showStatusMessage('Please fill in all required fields', 'error');
+function validateContactForm(formData) {
+  const errors = [];
+  
+  if (!formData.name) errors.push('Name is required');
+  if (!formData.email) errors.push('Email is required');
+  if (!formData.subject) errors.push('Subject is required');
+  if (!formData.message) errors.push('Message is required');
+  
+  if (formData.email && !isValidEmail(formData.email)) {
+    errors.push('Please enter a valid email address');
+  }
+  
+  if (formData.message && formData.message.length < 10) {
+    errors.push('Message should be at least 10 characters');
+  }
+  
+  if (errors.length > 0) {
+    showStatusMessage(errors.join('<br>'), 'error');
     return false;
   }
-
-  if (!isValidEmail(params.email)) {
-    showStatusMessage('Please enter a valid email address', 'error');
-    return false;
-  }
-
-  if (params.message.length < 10) {
-    showStatusMessage('Message should be at least 10 characters', 'error');
-    return false;
-  }
-
+  
   return true;
 }
 
@@ -1404,7 +483,7 @@ function setupExternalLinks() {
       modal.className = 'external-link-modal';
       modal.innerHTML = `
         <div class="modal-content">
-          <h3>Free Finder</h3>
+          <h3>Leaving Free Finder</h3>
           <p>You are about to visit:</p>
           <p class="link-preview">${this.href.replace(/^https?:\/\//, '')}</p>
           <div class="modal-buttons">
@@ -1438,120 +517,522 @@ function setupCardAnimations() {
     observer.observe(card);
   });
 }
-// Free Finder Visibility Fix for GitHub Pages
+
+// Ensure EmailJS is loaded
+if (typeof emailjs === 'undefined') {
+  console.error('EmailJS is not loaded!');
+  const script = document.createElement('script');
+  script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
+  script.onload = function() {
+    emailjs.init({
+      publicKey: "XMPN1BECultZ3Fyrv",
+      blockHeadless: true,
+      limitRate: {
+        id: 'app',
+        throttle: 10000
+      }
+    });
+  };
+  document.head.appendChild(script);
+}
+// Initialize EmailJS with enhanced security
+(function () {
+  emailjs.init({
+    publicKey: "XMPN1BECultZ3Fyrv",
+    blockHeadless: true,
+    limitRate: {
+      id: 'app',
+      throttle: 10000
+    }
+  });
+})();
+
+
+
+// Initialize the application with enhanced checks
 document.addEventListener('DOMContentLoaded', function() {
-    // ======================
-    // VISIBILITY FIXES
-    // ======================
-    function fixVisibilityIssues() {
-        // 1. Ensure all cards are visible
-        const cards = document.querySelectorAll('.category-card, .movie-item, .resource-card');
-        cards.forEach(card => {
-            card.style.opacity = '1';
-            card.style.visibility = 'visible';
-            card.style.display = 'block';
-        });
+  // Only initialize elements that exist on the current page
+  initializeApp();
+  
+  // Add event listeners for elements that exist
+  if (elements.authButton) elements.authButton.addEventListener('click', openAuthModal);
+  if (elements.logoutBtn) elements.logoutBtn.addEventListener('click', handleLogout);
+  
+  // Check if we're on a protected page
+  if (document.querySelector('.protected-content') && !getCurrentUser()) {
+    showToast('🔒 Please login to access all features', 'info');
+  }
+});
 
-        // 2. Fix z-index stacking issues
-        const mainContent = document.querySelector('main');
-        if (mainContent) {
-            mainContent.style.position = 'relative';
-            mainContent.style.zIndex = '1';
-        }
+function initializeApp() {
+  // Form submissions (if on contact page)
+  if (elements.contactForm) {
+    elements.contactForm.addEventListener('submit', handleFormSubmit);
+  }
 
-        // 3. Reset any problematic inherited styles
-        document.body.style.overflowX = 'hidden';
-        document.documentElement.style.overflowX = 'hidden';
-        
-        // 4. Force redraw for transition elements
-        const forceRedraw = (element) => {
-            if (!element) return;
-            element.style.display = 'none';
-            element.offsetHeight; // Trigger reflow
-            element.style.display = '';
-        };
+  // Auth modal (if exists on page)
+  if (elements.authModal) {
+    setupAuthModal();
+  }
 
-        cards.forEach(forceRedraw);
+  // Protected click tracking (all pages)
+  document.addEventListener('click', trackProtectedClicks);
+
+  // Initialize UI and check auth status (all pages)
+  updateAuthUI();
+  setupExternalLinks();
+  setupCardAnimations();
+  checkSessionTimeout();
+
+  // Load any saved users (all pages)
+  if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify({}));
+  }
+}
+
+function setupAuthModal() {
+  elements.authForm.addEventListener('submit', handleAuthSubmit);
+  elements.closeModalBtn.addEventListener('click', closeAuthModal);
+  elements.authToggle.addEventListener('click', toggleAuthMode);
+  
+  // Password strength indicator
+  if (elements.authPassword) {
+    elements.authPassword.addEventListener('input', updatePasswordStrength);
+  }
+  
+  // Remember me functionality
+  if (elements.rememberMe) {
+    const rememberedEmail = localStorage.getItem('rememberedEmail');
+    if (rememberedEmail) {
+      elements.authEmail.value = rememberedEmail;
+      elements.rememberMe.checked = true;
     }
+  }
+}
 
-    // ======================
-    // ENHANCED CARD VISIBILITY
-    // ======================
-    function enhanceCardVisibility() {
-        const cards = document.querySelectorAll('.category-card, .movie-item');
-        cards.forEach(card => {
-            // Ensure hover states work
-            card.style.transition = 'all 0.3s ease';
-            card.style.transform = 'translateZ(0)'; // Hardware accelerate
-            
-            // Add visible border
-            card.style.border = '1px solid rgba(0,0,0,0.1)';
-            card.style.boxShadow = '0 2px 5px rgba(0,0,0,0.1)';
-            
-            // Make sure content is visible
-            const cardContent = card.querySelector('.card-content');
-            if (cardContent) {
-                cardContent.style.opacity = '1';
-                cardContent.style.visibility = 'visible';
-            }
-        });
+// Enhanced Authentication Functions
+function handleAuthSubmit(e) {
+  e.preventDefault();
+  
+  if (currentAuthMode === 'login') {
+    handleLogin();
+  } else {
+    handleRegister();
+  }
+}
+
+function handleLogin() {
+  const email = elements.authEmail.value.trim();
+  const password = elements.authPassword.value;
+  
+  if (!validateAuthInput(email, password)) return;
+
+  const users = JSON.parse(localStorage.getItem('users'));
+  const allAccounts = { ...CONFIG.demoAccounts, ...users };
+
+  if (allAccounts[email] && allAccounts[email].password === password) {
+    // Remember email if checkbox is checked
+    if (elements.rememberMe && elements.rememberMe.checked) {
+      localStorage.setItem('rememberedEmail', email);
+    } else {
+      localStorage.removeItem('rememberedEmail');
     }
-
-    // ======================
-    // FIX EXTERNAL LINK DISPLAY
-    // ======================
-    function fixExternalLinkDisplay() {
-        const links = document.querySelectorAll('a[href^="http"]');
-        links.forEach(link => {
-            link.style.display = 'inline-block';
-            link.style.visibility = 'visible';
-            link.style.opacity = '1';
-            
-            // Add visual indicator for external links
-            if (!link.href.includes(window.location.hostname)) {
-                link.innerHTML += ' <i class="fas fa-external-link-alt"></i>';
-            }
-        });
-    }
-
-    // ======================
-    // MAIN INITIALIZATION
-    // ======================
-    function initialize() {
-        // Run visibility fixes
-        fixVisibilityIssues();
-        enhanceCardVisibility();
-        fixExternalLinkDisplay();
-
-        // Set timeout as fallback
-        setTimeout(() => {
-            fixVisibilityIssues();
-        }, 1000);
-
-        // Listen for hash changes
-        window.addEventListener('hashchange', fixVisibilityIssues);
-    }
-
-    // Start the fixes
-    initialize();
-
-    // ======================
-    // ORIGINAL FUNCTIONALITY
-    // ======================
-    // [Include all your original code here - authentication, contact form, etc.]
-    // Make sure to merge this with your existing functionality
     
-    // Initialize EmailJS
-    if (typeof emailjs !== 'undefined') {
-        emailjs.init({
-            publicKey: "XMPN1BECultZ3Fyrv",
-            blockHeadless: true,
-            limitRate: {
-                id: 'app',
-                throttle: 10000
-            }
-        });
-    }
+    handleSuccessfulAuth(email, allAccounts[email].name, allAccounts[email].role);
+  } else {
+    showAuthError('Invalid email or password');
+    shakeAuthForm();
+  }
+}
 
-    // [Rest of your original code...]
+function handleRegister() {
+  const email = elements.authEmail.value.trim();
+  const password = elements.authPassword.value;
+  const passwordConfirm = elements.authPasswordConfirm.value;
+  const name = elements.authName.value.trim();
+  
+  if (!validateRegistration(email, password, passwordConfirm, name)) return;
+
+  const users = JSON.parse(localStorage.getItem('users'));
+  
+  if (users[email] || CONFIG.demoAccounts[email]) {
+    showAuthError('Email already registered');
+    shakeAuthForm();
+    return;
+  }
+
+  users[email] = {
+    password: password,
+    name: name || email.split('@')[0],
+    registered: new Date().toISOString(),
+    role: 'user',
+    preferences: {}
+  };
+
+  localStorage.setItem('users', JSON.stringify(users));
+  handleSuccessfulAuth(email, users[email].name, users[email].role);
+}
+
+// Enhanced Validation
+function validateAuthInput(email, password) {
+  if (!email || !password) {
+    showAuthError('Please fill in both fields');
+    return false;
+  }
+
+  if (!isValidEmail(email)) {
+    showAuthError('Please enter a valid email address');
+    return false;
+  }
+
+  return true;
+}
+
+function validateRegistration(email, password, passwordConfirm, name) {
+  if (!validateAuthInput(email, password)) return false;
+
+  // Enhanced password validation
+  const passwordErrors = checkPasswordStrength(password);
+  if (passwordErrors.length > 0) {
+    showAuthError(passwordErrors.join('<br>'));
+    return false;
+  }
+
+  if (password !== passwordConfirm) {
+    showAuthError('Passwords do not match');
+    return false;
+  }
+
+  if (!name.trim()) {
+    showAuthError('Please enter your name');
+    return false;
+  }
+
+  return true;
+}
+
+function checkPasswordStrength(password) {
+  const errors = [];
+  const requirements = CONFIG.passwordRequirements;
+
+  if (password.length < requirements.minLength) {
+    errors.push(`Password must be at least ${requirements.minLength} characters`);
+  }
+  if (requirements.requireUpper && !/[A-Z]/.test(password)) {
+    errors.push('Password must contain at least one uppercase letter');
+  }
+  if (requirements.requireNumber && !/[0-9]/.test(password)) {
+    errors.push('Password must contain at least one number');
+  }
+  if (requirements.requireSpecial && !/[^A-Za-z0-9]/.test(password)) {
+    errors.push('Password must contain at least one special character');
+  }
+
+  return errors;
+}
+
+function updatePasswordStrength() {
+  if (!elements.passwordStrength) return;
+  
+  const password = elements.authPassword.value;
+  let strength = 0;
+  
+  // Length check
+  if (password.length >= CONFIG.passwordRequirements.minLength) strength++;
+  // Uppercase check
+  if (/[A-Z]/.test(password)) strength++;
+  // Number check
+  if (/[0-9]/.test(password)) strength++;
+  // Special char check
+  if (/[^A-Za-z0-9]/.test(password)) strength++;
+  
+  elements.passwordStrength.innerHTML = '';
+  const strengthText = ['Very Weak', 'Weak', 'Moderate', 'Strong', 'Very Strong'][strength];
+  const strengthClass = ['very-weak', 'weak', 'moderate', 'strong', 'very-strong'][strength];
+  
+  if (password.length > 0) {
+    elements.passwordStrength.innerHTML = `
+      <div class="strength-meter ${strengthClass}">
+        <span class="strength-text">Password Strength: ${strengthText}</span>
+        <div class="strength-bars">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+// Enhanced UI Functions
+function openAuthModal(mode = 'login') {
+  currentAuthMode = mode;
+  elements.authModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  elements.authEmail.focus();
+  elements.authForm.reset();
+  elements.authError.textContent = '';
+  
+  // Reset to appropriate mode
+  toggleAuthMode(mode === 'login');
+  
+  // Add animation class
+  elements.authModal.querySelector('.auth-modal-content').classList.add('modal-open');
+}
+
+function closeAuthModal() {
+  const modalContent = elements.authModal.querySelector('.auth-modal-content');
+  modalContent.classList.remove('modal-open');
+  modalContent.classList.add('modal-close');
+  
+  setTimeout(() => {
+    elements.authModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    modalContent.classList.remove('modal-close');
+  }, 300);
+}
+
+function toggleAuthMode(showLogin = true) {
+  currentAuthMode = showLogin ? 'login' : 'register';
+  
+  elements.loginBtn.style.display = showLogin ? 'block' : 'none';
+  elements.registerSubmitBtn.style.display = showLogin ? 'none' : 'block';
+  elements.authToggle.innerHTML = showLogin 
+    ? 'Need an account? <span class="auth-mode-link">Register</span>' 
+    : 'Already have an account? <span class="auth-mode-link">Login</span>';
+  elements.authTitle.textContent = showLogin ? 'Login to Your Account' : 'Create New Account';
+  elements.passwordConfirmGroup.style.display = showLogin ? 'none' : 'block';
+  elements.nameGroup.style.display = showLogin ? 'none' : 'block';
+  
+  // Update password strength visibility
+  if (elements.passwordStrength) {
+    elements.passwordStrength.style.display = showLogin ? 'none' : 'block';
+  }
+  
+  elements.authError.textContent = '';
+}
+
+function shakeAuthForm() {
+  const form = elements.authForm;
+  form.classList.add('shake');
+  setTimeout(() => {
+    form.classList.remove('shake');
+  }, 500);
+}
+
+function updateAuthUI() {
+  const user = getCurrentUser();
+  
+  if (user) {
+    if (elements.authButton) elements.authButton.style.display = 'none';
+    if (elements.logoutBtn) elements.logoutBtn.style.display = 'block';
+    if (elements.userGreeting) {
+      elements.userGreeting.innerHTML = `
+        <span class="welcome-text">Welcome,</span>
+        <span class="user-name">${user.name || user.email.split('@')[0]}</span>
+        ${user.role === 'admin' ? '<span class="user-badge admin">Admin</span>' : ''}
+      `;
+      elements.userGreeting.style.display = 'flex';
+    }
+  } else {
+    if (elements.authButton) elements.authButton.style.display = 'block';
+    if (elements.logoutBtn) elements.logoutBtn.style.display = 'none';
+    if (elements.userGreeting) elements.userGreeting.style.display = 'none';
+  }
+}
+
+// Initialize EmailJS with enhanced security
+(function () {
+  emailjs.init({
+    publicKey: "XMPN1BECultZ3Fyrv",
+    blockHeadless: true,
+    limitRate: {
+      id: 'app',
+      throttle: 10000
+    }
+  });
+})();
+
+// Configuration Constants
+const CONFIG = {
+  demoAccounts: {
+    'admin@freefinder.com': {
+      password: 'admin123',
+      name: 'Admin',
+      role: 'admin'
+    },
+    'user@freefinder.com': {
+      password: 'user123',
+      name: 'Demo User',
+      role: 'user'
+    }
+  },
+  maxClicksBeforeReminder: 5,
+  minPasswordLength: 8,
+  sessionTimeout: 30 // minutes
+};
+
+// DOM Elements
+const elements = {
+  contactForm: document.getElementById('contactForm'),
+  statusMessage: document.getElementById('statusMessage'),
+  authButton: document.getElementById('authButton'),
+  loginBtn: document.getElementById('loginBtn'),
+  registerBtn: document.getElementById('registerBtn'),
+  registerSubmitBtn: document.getElementById('registerSubmitBtn'),
+  closeModalBtn: document.getElementById('closeModalBtn'),
+  authModal: document.getElementById('authModal'),
+  searchInput: document.getElementById('searchInput'),
+  logoutBtn: document.getElementById('logoutBtn'),
+  userGreeting: document.getElementById('userGreeting'),
+  authForm: document.getElementById('authForm'),
+  authEmail: document.getElementById('authEmail'),
+  authPassword: document.getElementById('authPassword'),
+  authPasswordConfirm: document.getElementById('authPasswordConfirm'),
+  authName: document.getElementById('authName'),
+  authError: document.getElementById('authError'),
+  authTitle: document.getElementById('authTitle'),
+  authToggle: document.getElementById('authToggle'),
+  passwordConfirmGroup: document.getElementById('passwordConfirmGroup'),
+  nameGroup: document.getElementById('nameGroup')
+};
+
+
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+  initializeApp();
+  
+  // Fix for close button - event delegation approach
+  document.addEventListener('click', function(e) {
+    if (e.target.id === 'closeModalBtn' || 
+        e.target.classList.contains('close-modal-btn') ||
+        (e.target === document.getElementById('authModal') && e.target !== document.querySelector('.auth-modal-content'))) {
+      e.preventDefault();
+      closeAuthModal();
+    }
+  });
+});
+
+function initializeApp() {
+  if (elements.contactForm) {
+    elements.contactForm.addEventListener('submit', handleFormSubmit);
+  }
+
+  if (elements.authModal) {
+    setupAuthModal();
+  }
+
+  document.addEventListener('click', trackProtectedClicks);
+  updateAuthUI();
+  setupExternalLinks();
+  setupCardAnimations();
+  checkSessionTimeout();
+
+  if (!localStorage.getItem('users')) {
+    localStorage.setItem('users', JSON.stringify({}));
+  }
+}
+
+function setupAuthModal() {
+  elements.authForm.addEventListener('submit', handleAuthSubmit);
+  elements.authToggle.addEventListener('click', toggleAuthMode);
+  
+  // Ensure modal is properly initialized
+  elements.authModal.style.display = 'none';
+  elements.authModal.style.zIndex = '10000';
+}
+
+function closeAuthModal() {
+  const modalContent = elements.authModal.querySelector('.auth-modal-content');
+  modalContent.classList.add('modal-close');
+  
+  setTimeout(() => {
+    elements.authModal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+    modalContent.classList.remove('modal-close');
+  }, 300);
+}
+
+function openAuthModal(mode = 'login') {
+  currentAuthMode = mode;
+  elements.authModal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  elements.authEmail.focus();
+  elements.authForm.reset();
+  elements.authError.textContent = '';
+  toggleAuthMode(mode === 'login');
+  
+  const modalContent = elements.authModal.querySelector('.auth-modal-content');
+  modalContent.classList.remove('modal-close');
+  modalContent.classList.add('modal-open');
+}
+
+// Fix for Login Modal Close Button
+document.addEventListener('DOMContentLoaded', function() {
+  // Get the close button and modal
+  const closeButton = document.getElementById('closeModalBtn');
+  const loginModal = document.getElementById('authModal');
+
+  // Only proceed if elements exist
+  if (closeButton && loginModal) {
+    // Add click event to close button
+    closeButton.addEventListener('click', function(e) {
+      e.preventDefault(); // Prevent default behavior
+      loginModal.style.display = 'none'; // Hide modal
+      document.body.style.overflow = 'auto'; // Re-enable scrolling
+    });
+
+    // Also close when clicking outside modal content
+    loginModal.addEventListener('click', function(e) {
+      if (e.target === loginModal) { // Check if clicked on modal background
+        loginModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+      }
+    });
+  } else {
+    console.log('Login modal elements not found');
+  }
+});
+
+// Make sure open function works (if you're using one)
+function openLoginModal() {
+  const loginModal = document.getElementById('authModal');
+  if (loginModal) {
+    loginModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+}
+// Navigation Alignment Fix
+document.addEventListener('DOMContentLoaded', function() {
+  // Cache navigation elements
+  const navItems = document.querySelectorAll('.nav-item');
+  const navContainer = document.querySelector('.nav-container');
+  
+  if (!navItems.length || !navContainer) return;
+
+  // Function to equalize all nav items
+  function equalizeNavItems() {
+    // Find the widest nav item
+    let maxWidth = 0;
+    navItems.forEach(item => {
+      item.style.width = 'auto'; // Reset to natural width
+      maxWidth = Math.max(maxWidth, item.offsetWidth);
+    });
+
+    // Apply consistent width to all items
+    navItems.forEach(item => {
+      item.style.width = `${maxWidth}px`;
+      item.style.textAlign = 'center';
+      item.style.padding = '12px 0'; // Consistent padding
+    });
+
+    // Center the nav container
+    navContainer.style.justifyContent = 'center';
+  }
+
+  // Run on load and resize
+  equalizeNavItems();
+  window.addEventListener('resize', equalizeNavItems);
 });
