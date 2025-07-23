@@ -1449,3 +1449,78 @@ main {
 body, html {
     overflow-x: hidden !important;
 }
+/* ==========================================
+   NAVIGATION POPUP STYLES
+   ========================================== */
+.nav-popup {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  padding: 20px;
+  z-index: 9999;
+  animation: popupSlideIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 1px solid #eee;
+  max-width: 280px;
+}
+
+.popup-content {
+  position: relative;
+  text-align: center;
+}
+
+.popup-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 12px;
+}
+
+.nav-popup p {
+  margin: 0;
+  color: #333;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.popup-close {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.popup-close:hover {
+  background: #e60000;
+  transform: scale(1.1);
+}
+
+@keyframes popupSlideIn {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+  .nav-popup {
+    left: 20px;
+    right: 20px;
+    max-width: none;
+    bottom: 15px;
+  }
+}

@@ -1148,6 +1148,83 @@ function openAuthModal() {
   elements.authError.textContent = '';
   toggleAuthMode(false); // Default to login mode
 }
+// ===== 3-CLICK LOGIN TRIGGER (SKIPS WHEN LOGGED IN) =====
+document.addEventListener('DOMContentLoaded', function() {
+  // Configuration
+  const CLICKS_REQUIRED = 3;
+  const STORAGE_KEY = 'navClickCount';
+  let clickCount = parseInt(localStorage.getItem(STORAGE_KEY)) || 0;
+  let isModalOpen = false;
+
+  // Get elements
+  const navLinks = document.querySelectorAll('.header-right a');
+  const authModal = document.getElementById('authModal');
+  const closeModalBtn = document.getElementById('closeModalBtn');
+
+  // Don't run if user is logged in
+  if (localStorage.getItem('loggedInUser')) {
+    return;
+  }
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      // Skip if logged in or modal is open
+      if (localStorage.getItem('loggedInUser') || isModalOpen) {
+        return;
+      }
+
+      clickCount++;
+      localStorage.setItem(STORAGE_KEY, clickCount.toString());
+
+      if (clickCount >= CLICKS_REQUIRED) {
+        openAuthModal();
+        clickCount = 0;
+        localStorage.setItem(STORAGE_KEY, '0');
+        e.preventDefault();
+      }
+    });
+  });
+
+  function openAuthModal() {
+    if (!authModal) return;
+    
+    authModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    isModalOpen = true;
+    
+    const emailField = document.getElementById('authEmail');
+    if (emailField) emailField.focus();
+
+    if (closeModalBtn) {
+      closeModalBtn.onclick = closeAuthModal;
+    }
+    
+    authModal.addEventListener('click', function(e) {
+      if (e.target === authModal) {
+        closeAuthModal();
+      }
+    });
+  }
+
+  function closeAuthModal() {
+    authModal.style.display = 'none';
+    document.body.style.overflow = '';
+    isModalOpen = false;
+  }
+
+  // Monitor login state changes
+  const originalHandleLogin = window.handleLogin;
+  window.handleLogin = function(email, name) {
+    originalHandleLogin(email, name);
+    localStorage.setItem(STORAGE_KEY, '0'); // Reset counter
+  };
+
+  const originalHandleRegister = window.handleRegister;
+  window.handleRegister = function(email, name) {
+    originalHandleRegister(email, name);
+    localStorage.setItem(STORAGE_KEY, '0'); // Reset counter
+  };
+});
 
 function closeAuthModal() {
   elements.authModal.style.display = 'none';
@@ -1327,7 +1404,7 @@ function setupExternalLinks() {
       modal.className = 'external-link-modal';
       modal.innerHTML = `
         <div class="modal-content">
-          <h3>Leaving Free Finder</h3>
+          <h3>Free Finder</h3>
           <p>You are about to visit:</p>
           <p class="link-preview">${this.href.replace(/^https?:\/\//, '')}</p>
           <div class="modal-buttons">
