@@ -842,17 +842,6 @@ function updateAuthUI() {
   }
 }
 
-// Initialize EmailJS with enhanced security
-(function () {
-  emailjs.init({
-    publicKey: "XMPN1BECultZ3Fyrv",
-    blockHeadless: true,
-    limitRate: {
-      id: 'app',
-      throttle: 10000
-    }
-  });
-})();
 
 // Configuration Constants
 const CONFIG = {
