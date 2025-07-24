@@ -1,24 +1,81 @@
-// Fixed Navigation System
-document.addEventListener('DOMContentLoaded', function() {
-  // Get all navigation elements
-  const navItems = document.querySelectorAll('.nav-item');
-  const activeClass = 'nav-active';
-  
-  // Set initial active item based on current page
-  function setActiveNav() {
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    navItems.forEach(item => {
-      const itemPage = item.getAttribute('data-page');
-      if (itemPage === currentPage) {
-        item.classList.add(activeClass);
-      } else {
-        item.classList.remove(activeClass);
-      }
+  document.addEventListener('DOMContentLoaded', function() {
+    // Initialize EmailJS with your CORRECT private key
+    emailjs.init({
+        publicKey: "XMPN1BECultZ3Fyrv",
+        blockHeadless: true,  // Prevents spam bots
+        limitRate: {
+            id: 'contact-form',  // Unique identifier
+            throttle: 5000  // 5 seconds between emails
+        }
     });
-  }
 
-  // Make navigation sticky/fixed
+    const contactForm = document.getElementById('contact-form');
+    const statusMessage = document.getElementById('status-message');
+    const submitBtn = contactForm?.querySelector('button[type="submit"]');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            // Validate form
+            if (!validateForm(contactForm)) return;
+
+            // UI Loading state
+            if (submitBtn) {
+                submitBtn.innerHTML = `
+                    <span class="spinner"></span> Sending...
+                `;
+                submitBtn.disabled = true;
+            }
+            
+            if (statusMessage) {
+                statusMessage.textContent = '';
+                statusMessage.className = '';
+                statusMessage.style.display = 'none';
+            }
+            
+            try {
+                // Send using YOUR SPECIFIC SERVICE AND TEMPLATE
+                const response = await emailjs.sendForm(
+                    'service_t5qcgjv', 
+                    'template_f1tvom3', 
+                    contactForm
+                );
+                
+                console.log('EmailJS Success:', response);
+                showStatus('✅ Message sent successfully!', 'success');
+                contactForm.reset();
+                
+            } catch (error) {
+                console.error('EmailJS Error:', error);
+                showStatus('❌ Failed to send. Please try again later.', 'error');
+                
+            } finally {
+                if (submitBtn) {
+                    submitBtn.innerHTML = 'Send Message';
+                    submitBtn.disabled = false;
+                }
+            }
+        });
+    }
+
+    function validateForm(form) {
+        const email = form.querySelector('[name="email"]')?.value;
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            showStatus('Please enter a valid email address', 'error');
+            return false;
+        }
+        return true;
+    }
+
+    function showStatus(message, type) {
+        if (!statusMessage) return;
+        statusMessage.textContent = message;
+        statusMessage.className = type;
+        statusMessage.style.display = 'block';
+    }
+});
+// Make navigation sticky/fixed
   function fixNavigation() {
     const nav = document.querySelector('.main-nav');
     if (nav) {
@@ -40,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Update on resize
   window.addEventListener('resize', fixNavigation);
-});
+;
 // Initialize EmailJS with enhanced security
 (function () {
   emailjs.init({

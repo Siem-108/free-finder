@@ -1651,3 +1651,41 @@ body, html {
 html {
   scroll-behavior: smooth;
 }
+.spinner {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    border: 3px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: #000;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+#statusMessage {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    display: none;
+}
+
+#statusMessage.show {
+    display: block;
+}
+
+#statusMessage.success {
+    background-color: rgba(0, 255, 0, 0.1);
+    color: #0f0;
+    border: 1px solid rgba(0, 255, 0, 0.3);
+}
+
+#statusMessage.error {
+    background-color: rgba(255, 0, 0, 0.1);
+    color: #f00;
+    border: 1px solid rgba(255, 0, 0, 0.3);
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
