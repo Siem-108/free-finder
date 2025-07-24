@@ -1532,7 +1532,6 @@ async function handleFormSubmit(event) {
 
   try {
     await emailjs.send('service_t5qcgjv', 'template_f1tvom3', formData);
-    await emailjs.send('service_t5qcgjv', 'template_qawufof', formData);
     
     clearTimeout(emailTimeout);
     showStatusMessage('✅ Message sent! Check your email for confirmation.', 'success');
