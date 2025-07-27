@@ -627,3 +627,9 @@ window.FreeFinder = {
   cart: CartModule,
   utils: Utils
 };
+
+
+document.querySelector('.menu-toggle').addEventListener('click', function() {
+  document.querySelector('.header-right nav ul').classList.toggle('active');
+  this.classList.toggle('active');
+});

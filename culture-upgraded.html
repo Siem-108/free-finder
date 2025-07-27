@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Finder - Culture</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+   <script type="module" src="nav-tracker.js"></script>
+  <script type="module" src="script.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+</head>
+<body>
+  <!-- Header -->
+  <!-- Add this right after your <header> tag -->
+<div class="auth-bar">
+  <div class="auth-container">
+    <span id="userGreeting"></span>
+    <button id="authButton" class="auth-btn login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+    <button id="registerBtn" class="auth-btn register-btn">
+      <i class="fas fa-user-plus"></i> Register
+    </button>
+    <button id="logoutBtn" class="auth-btn logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+<button class="menu-toggle">
+  <i class="fas fa-bars"></i>
+</button>
+  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <a href="Home-upgraded.html" class="logo-wrapper">
+          <img src="images/0000.jpg" alt="Site Logo" class="logo" />
+        </a>
+        <div class="site-info">
+          <div class="site-title">Free Finder</div>
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search..." />
+          </div>
+        </div>
+      </div>
+
+      <nav class="header-right">
+        <ul>
+          <li><a href="shop-upgraded.html">SHOP</a></li>
+          <li><a href="Home-upgraded.html">HOME</a></li>
+          <li><a href="culture-upgraded.html">CULTURE</a></li>
+          <li><a href="contact-upgraded.html">CONTACT US</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div id="searchResults"></div>
+
+  <!-- Culture & Heritage Section -->
+  <section>
+    <h2>🌍 Culture & Heritage</h2>
+    <div class="category-grid">
+      <a href="https://artsandculture.google.com/" class="category-card">
+        <img src="images/0022.jpg" alt="Virtual Museums" />
+        <p>Virtual Museums</p>
+      </a>
+      <a href="https://www.loc.gov/" class="category-card">
+        <img src="images/0023.jpg" alt="Historical Archives" />
+        <p>Historical Archives</p>
+      </a>
+      <a href="https://www.openculture.com/free_museum_collections" class="category-card">
+        <img src="images/0024.jpg" alt="Cultural Collections" />
+        <p>Cultural Collections</p>
+      </a>
+      <a href="https://www.britishmuseum.org/collection" class="category-card">
+        <img src="images/0025.jpg" alt="British Museum" />
+        <p>British Museum</p>
+      </a>
+      <a href="https://www.metmuseum.org/art/collection" class="category-card">
+        <img src="images/0026.jpg" alt="Metropolitan Art" />
+        <p>Metropolitan Art</p>
+      </a>
+      <a href="https://folkcloud.com/" class="category-card">
+        <img src="images/0027.jpg" alt="Traditional Music" />
+        <p>Traditional Music</p>
+      </a>
+      <a href="https://www.omniglot.com/" class="category-card">
+        <img src="images/0028.jpg" alt="World Languages" />
+        <p>World Languages</p>
+      </a>
+      <a href="https://storyweaver.org.in/" class="category-card">
+        <img src="images/0029.jpg" alt="StoryWeaver" />
+        <p>StoryWeaver</p>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🌙 Islamic Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://quran.com/" class="category-card">
+        <img src="images/0030.jpg" alt="Quran" />
+        <p>Read the Quran (Multi-language)</p>
+      </a>
+      <a href="https://sunnah.com/" class="category-card">
+        <img src="images/0031.jpg" alt="Hadith Collections" />
+        <p>Hadith Collections</p>
+      </a>
+      <a href="https://www.islamicfinder.org/" class="category-card">
+        <img src="images/0032.jpg" alt="IslamicFinder" />
+        <p>Prayer Times & Resources</p>
+      </a>
+      <a href="https://www.alim.org/" class="category-card">
+        <img src="images/0033.jpg" alt="Islamic Encyclopedia" />
+        <p>Islamic Encyclopedia</p>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>✝️ Christian Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://www.biblegateway.com/" class="category-card">
+        <img src="images/0034.jpg" alt="Bible Gateway" />
+        <p>Bible (Multiple Versions)</p>
+      </a>
+      <a href="https://www.biblestudytools.com/" class="category-card">
+        <img src="images/0035.jpg" alt="Bible Study Tools" />
+        <p>Bible Study Tools</p>
+      </a>
+      <a href="https://www.vatican.va/" class="category-card">
+        <img src="images/0036.jpg" alt="The Vatican" />
+        <p>The Vatican Archives</p>
+      </a>
+      <a href="https://www.christianitytoday.com/" class="category-card">
+        <img src="images/0037.jpg" alt="Christian News & Culture" />
+        <p>Christian News & Culture</p>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🕉️ Hindu Culture & Resources</h2>
+    <div class="category-grid">
+      <a href="https://www.holy-bhagavad-gita.org/" class="category-card">
+        <img src="images/0038.jpg" alt="Bhagavad Gita" />
+        <p>Read the Bhagavad Gita</p>
+      </a>
+      <a href="https://www.sacred-texts.com/hin/" class="category-card">
+        <img src="images/0039.jpg" alt="Sacred Hindu Texts" />
+        <p>Sacred Hindu Texts</p>
+      </a>
+      <a href="https://iskcon.org/" class="category-card">
+        <img src="images/0040.jpg" alt="ISKCON" />
+        <p>ISKCON Resources</p>
+      </a>
+      <a href="https://www.drikpanchang.com/" class="category-card">
+        <img src="images/0041.jpg" alt="Hindu Calendar" />
+        <p>Hindu Calendar & Panchang</p>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🕎 Other Major Faiths & Cultures</h2>
+    <div class="category-grid">
+      <a href="https://www.jewishvirtuallibrary.org/" class="category-card">
+        <img src="images/0042.jpg" alt="Jewish Virtual Library" />
+        <p>Jewish Virtual Library</p>
+      </a>
+      <a href="https://www.buddhanet.net/" class="category-card">
+        <img src="images/0043.jpg" alt="BuddhaNet" />
+        <p>Buddhism (Texts & Teachings)</p>
+      </a>
+      <a href="https://www.sikhnet.com/" class="category-card">
+        <img src="images/0044.jpg" alt="SikhNet" />
+        <p>Sikh Culture & Gurbani</p>
+      </a>
+      <a href="https://plato.stanford.edu/" class="category-card">
+        <img src="images/0045.jpg" alt="Philosophy Encyclopedia" />
+        <p>Global Philosophies</p>
+      </a>
+    </div>
+  </section>
+
+  <!-- Login/Register Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <button id="closeModalBtn" class="btn-close">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <h2 id="authTitle">Login to Your Account</h2>
+      
+      <form id="authForm">
+        <div class="form-group">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" required placeholder="your@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" required placeholder="••••••••">
+        </div>
+        
+        <div class="form-group" id="passwordConfirmGroup" style="display: none;">
+          <label for="authPasswordConfirm">Confirm Password</label>
+          <input type="password" id="authPasswordConfirm" placeholder="••••••••">
+        </div>
+        
+        <div class="form-group" id="nameGroup" style="display: none;">
+          <label for="authName">Your Name (Optional)</label>
+          <input type="text" id="authName" placeholder="John Doe">
+        </div>
+        
+        <div id="authError" class="error-message"></div>
+        
+        <div class="auth-buttons">
+          <button type="button" id="loginBtn" class="btn-submit">
+            <i class="fas fa-lock"></i> Login
+          </button>
+          <button type="button" id="registerSubmitBtn" class="btn-submit" style="display: none;">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </div>
+        
+        <button type="button" id="authToggle" class="toggle-mode">
+          Need an account? Register
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Free Finder</title>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script type="module" src="nav-tracker.js"></script>
+  <script type="module" src="script.js"></script>
+  <link rel="stylesheet" href="css/style.css">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+/>
+</head>
+<body>
+  <!-- Header -->
+  <!-- Add this right after your <header> tag -->
+<div class="auth-bar">
+  <div class="auth-container">
+    <span id="userGreeting"></span>
+    <button id="authButton" class="auth-btn login-btn">
+      <i class="fas fa-sign-in-alt"></i> Login
+    </button>
+    <button id="registerBtn" class="auth-btn register-btn">
+      <i class="fas fa-user-plus"></i> Register
+    </button>
+    <button id="logoutBtn" class="auth-btn logout-btn">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
+  </div>
+</div>
+<button class="menu-toggle">
+  <i class="fas fa-bars"></i>
+</button>
+  <header>
+    <div class="header-content">
+      <div class="header-left">
+        <a href="Home-upgraded.html" class="logo-wrapper">
+          <img src="images/0000.jpg" alt="Site Logo" class="logo" />
+        </a>
+        <div class="site-info">
+          <div class="site-title">Free Finder</div>
+          <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Search..." />
+          </div>
+        </div>
+      </div>
+
+      <nav class="header-right">
+          <ul>
+          <li><a href="shop-upgraded.html">SHOP</a></li>
+          <li><a href="Home-upgraded.html">HOME</a></li>
+          <li><a href="culture-upgraded.html">CULTURE</a></li>
+          <li><a href="contact-upgraded.html">CONTACT US</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Search Results -->
+  <div id="searchResults"></div>
+
+  <!-- Categories -->
+  <section>
+    <h2>🎬 Entertainment</h2>
+    <div class="category-grid">
+      <a href="https://swatchseries.is/" class="category-card"><img src="images/0001.jpg" alt="Free Movies"><p>Free Movies</p></a>
+      <a href="https://aniwatchtv.to/" class="category-card"><img src="images/0010.jpg" alt="Free Anime"><p>Free Anime</p></a>
+      <a href="https://tv.garden/at/" class="category-card"><img src="images/0009.jpg" alt="Free TV"><p>Free TV Channels</p></a>
+      <a href="https://topdocumentaryfilms.com/" class="category-card"><img src="images/0007.jpg" alt="Docs"><p>Free Documentaries</p></a>
+      <a href="https://freemusicarchive.org" class="category-card"><img src="images/0003.jpg" alt="Free Music" /><p>Free Music</p></a>
+      <a href="https://www.myabandonware.com" class="category-card"><img src="images/0002.jpg" alt="Free Games" /><p>Free Games</p></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>📚 Learning & Reading</h2>
+    <div class="category-grid">
+      <a href="https://www.gutenberg.org/" class="category-card"><img src="images/0004.jpg"><p>Free Books</p></a>
+      <a href="https://librivox.org/" class="category-card"><img src="images/0005.jpg"><p>Free Audiobooks</p></a>
+      <a href="https://www.edx.org/" class="category-card"><img src="images/0006.jpg"><p>Free Courses</p></a>
+      <a href="https://archive.org/" class="category-card"><img src="images/0011.jpg"><p>Free Libraries</p></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🛠️ Software & Tools</h2>
+    <div class="category-grid">
+      <a href="https://ninite.com/" class="category-card"><img src="images/0008.jpg"><p>Free Software</p></a>
+      <a href="https://alternativeto.net/" class="category-card"><img src="images/0012.jpg"><p>Free Tools</p></a>
+      <a href="https://portableapps.com/" class="category-card"><img src="images/0016.jpg"><p>Portable Apps</p></a>
+      <a href="https://osalt.com/" class="category-card"><img src="images/0017.jpg"><p>Open Source Alternatives</p></a>
+    </div>
+  </section>
+
+  <section>
+    <h2>🎨 Creative Assets</h2>
+    <div class="category-grid">
+      <a href="https://www.dafont.com/" class="category-card"><img src="images/0013.jpg"><p>Free Fonts</p></a>
+      <a href="https://www.pexels.com/" class="category-card"><img src="images/0014.jpg"><p>Free Stock Photos</p></a>
+      <a href="https://html5up.net/" class="category-card"><img src="images/0015.jpg"><p>Free Web Templates</p></a>
+      <a href="https://www.flaticon.com/" class="category-card"><img src="images/0018.jpg"><p>Free Icons</p></a>
+      <a href="https://www.canva.com/design-templates/" class="category-card"><img src="images/0019.jpg"><p>Design Templates</p></a>
+      <a href="https://www.mixkit.co/" class="category-card"><img src="images/0020.jpg"><p>Free Video Assets</p></a>
+      <a href="https://www.remove.bg/" class="category-card"><img src="images/0021.jpg"><p>Background Remover</p></a>
+    </div>
+  </section>
+
+  <!-- Login/Register Modal -->
+  <div id="authModal" class="modal">
+    <div class="modal-content">
+      <button id="closeModalBtn" class="btn-close">
+        <i class="fas fa-times"></i>
+      </button>
+      
+      <h2 id="authTitle">Login to Your Account</h2>
+      
+      <form id="authForm">
+        <div class="form-group">
+          <label for="authEmail">Email</label>
+          <input type="email" id="authEmail" required placeholder="your@email.com">
+        </div>
+        
+        <div class="form-group">
+          <label for="authPassword">Password</label>
+          <input type="password" id="authPassword" required placeholder="••••••••">
+        </div>
+        
+        <div class="form-group" id="passwordConfirmGroup" style="display: none;">
+          <label for="authPasswordConfirm">Confirm Password</label>
+          <input type="password" id="authPasswordConfirm" placeholder="••••••••">
+        </div>
+        
+        <div class="form-group" id="nameGroup" style="display: none;">
+          <label for="authName">Your Name (Optional)</label>
+          <input type="text" id="authName" placeholder="John Doe">
+        </div>
+        
+        <div id="authError" class="error-message"></div>
+        
+        <div class="auth-buttons">
+          <button type="button" id="loginBtn" class="btn-submit">
+            <i class="fas fa-lock"></i> Login
+          </button>
+          <button type="button" id="registerSubmitBtn" class="btn-submit" style="display: none;">
+            <i class="fas fa-user-plus"></i> Register
+          </button>
+        </div>
+        
+        <button type="button" id="authToggle" class="toggle-mode">
+          Need an account? Register
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+
+</body>
+</html>
